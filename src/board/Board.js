@@ -1,12 +1,13 @@
 import { PerspectiveCamera, Scene, WebGLRenderer } from 'three'
 import { OrbitControls } from 'threeJSM/controls/OrbitControls.js'
+import { net } from '../net'
+import { drawCity } from './draw'
 
 class Board {
     renderer
     camera
     scene
     controls
-    #animatdId
 
     /**
      *
@@ -17,6 +18,14 @@ class Board {
         this.camera = this.initCamera()
         this.scene = this.initScene()
         this.controls = this.initControls()
+
+        this.update()
+
+        window.onresize = (ev) => {
+            this.camera.aspect = window.innerWidth / window.innerHeight
+            this.camera.updateProjectionMatrix()
+            this.renderer.setSize(window.innerWidth, window.innerHeight)
+        }
     }
 
     /**
@@ -53,8 +62,9 @@ class Board {
             75,
             window.innerWidth / window.innerHeight,
             0.1,
-            100
+            1000
         )
+        camera.position.setZ(20)
         return camera
     }
 
@@ -76,6 +86,7 @@ class Board {
             this.camera,
             this.renderer.domElement
         )
+        // controls
 
         return controls
     }
@@ -83,10 +94,15 @@ class Board {
     setOpt(opt) {}
 
     update() {
+        requestAnimationFrame(() => this.update())
+
         this.renderer.render(this.scene, this.camera)
-        if (!this.#animatdId) {
-            this.#animatdId = requestAnimationFrame(() => this.update())
-        }
+        this.controls.update()
+    }
+
+    async drawBoard() {
+        const boardData = (await net.getBoard()).data
+        drawCity(boardData, this.scene)
     }
 }
 
