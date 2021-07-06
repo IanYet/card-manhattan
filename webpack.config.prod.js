@@ -27,13 +27,14 @@ module.exports = {
                         loader: MiniCssExtractPlugin.loader,
                     },
                     {
-                        loader:'css-loader',
+                        loader: 'css-loader',
                         options: {
                             modules: {
-                                localIdentName: "[hash:base64:8]_[name]_[local]",
+                                localIdentName:
+                                    '[hash:base64:8]_[name]_[local]',
                             },
-                        }
-                    }
+                        },
+                    },
                 ],
             },
             {
@@ -42,7 +43,7 @@ module.exports = {
                     {
                         loader: MiniCssExtractPlugin.loader,
                     },
-                    'css-loader'
+                    'css-loader',
                 ],
             },
             {
@@ -65,6 +66,9 @@ module.exports = {
     stats: 'errors-only',
     resolve: {
         extensions: ['*', '.js', '.jsx'],
+        alias: {
+            threeJSM: 'three/examples/jsm',
+        },
     },
     devtool: 'none',
     optimization: {
@@ -86,9 +90,7 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new CopyPlugin({
-            patterns: [
-                { from: 'public', to: './' }
-              ],
+            patterns: [{ from: 'public', to: './' }],
         }),
         new MiniCssExtractPlugin({
             filename: 'css/[name].[hash:8].css',

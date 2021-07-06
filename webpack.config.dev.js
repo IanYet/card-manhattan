@@ -22,22 +22,20 @@ module.exports = {
                 use: [
                     'style-loader',
                     {
-                        loader:'css-loader',
+                        loader: 'css-loader',
                         options: {
                             modules: {
-                                localIdentName: "[hash:base64:8]_[name]_[local]",
+                                localIdentName:
+                                    '[hash:base64:8]_[name]_[local]',
                             },
-                        }
-                    }
+                        },
+                    },
                 ],
                 exclude: /node_modules/,
             },
             {
                 test: /(?<!\.module)\.css$/,
-                use: [
-                    'style-loader',
-                    'css-loader'
-                ],
+                use: ['style-loader', 'css-loader'],
                 exclude: /node_modules/,
             },
             {
@@ -56,7 +54,7 @@ module.exports = {
     },
     devtool: 'source-map',
     performance: {
-        hints: false 
+        hints: false,
     },
     optimization: {
         runtimeChunk: {
@@ -70,13 +68,16 @@ module.exports = {
                     name: 'lib',
                     test: /[\\/]node_modules[\\/]/,
                     chunks: 'all',
-                    reuseExistingChunk: true
+                    reuseExistingChunk: true,
                 },
             },
         },
     },
     resolve: {
         extensions: ['*', '.js', '.jsx'],
+        alias: {
+            threeJSM: 'three/examples/jsm'
+        },
     },
     devServer: {
         contentBase: path.join(__dirname, 'public/'),
