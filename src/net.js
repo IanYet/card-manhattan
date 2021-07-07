@@ -5,7 +5,7 @@ const net = {
     key: '',
     setUrl: (url) => (net.url = url),
     setKey: (key) => (net.key = key),
-    getBoard: async () => axios.get(`${net.url}board.json?key=${net.key}`),
+    getCity: async () => axios.get(`${net.url}board.json?key=${net.key}`),
 }
 
 export { net }

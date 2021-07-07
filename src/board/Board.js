@@ -1,4 +1,14 @@
-import { PerspectiveCamera, Scene, WebGLRenderer } from 'three'
+import {
+    Color,
+    FogExp2,
+    PerspectiveCamera,
+    Scene,
+    WebGLRenderer,
+    DirectionalLight,
+    AmbientLight,
+    HemisphereLight,
+    Vector3,
+} from 'three'
 import { OrbitControls } from 'threeJSM/controls/OrbitControls.js'
 import { net } from '../net'
 import { drawCity } from './draw'
@@ -18,6 +28,7 @@ class Board {
         this.camera = this.initCamera()
         this.scene = this.initScene()
         this.controls = this.initControls()
+        this.initLights()
 
         this.update()
 
@@ -41,13 +52,10 @@ class Board {
 
         const renderer = new WebGLRenderer({
             canvas: cav,
-            alpha: true,
-            premultipliedAlpha: false,
             antialias: true,
-            sortObjects: false,
-            autoClear: false,
         })
 
+        renderer.setPixelRatio(window.devicePixelRatio)
         renderer.setSize(window.innerWidth, window.innerHeight)
 
         return renderer
@@ -61,10 +69,11 @@ class Board {
         const camera = new PerspectiveCamera(
             75,
             window.innerWidth / window.innerHeight,
-            0.1,
-            1000
+            1,
+            1000000
         )
-        camera.position.setZ(20)
+        camera.position.setY(-4000)
+        camera.position.setZ(4000)
         return camera
     }
 
@@ -74,6 +83,8 @@ class Board {
      */
     initScene() {
         const scene = new Scene()
+        scene.background = new Color(0xeeeeee)
+        scene.fog = new FogExp2(0xcccccc, 0.00001)
         return scene
     }
 
@@ -91,6 +102,12 @@ class Board {
         return controls
     }
 
+    initLights() {
+        const light1 = new HemisphereLight(0xffffff, 0xcccccc)
+        light1.position.copy(new Vector3(0, 0, 1))
+        this.scene.add(light1)
+    }
+
     setOpt(opt) {}
 
     update() {
@@ -101,8 +118,8 @@ class Board {
     }
 
     async drawBoard() {
-        const boardData = (await net.getBoard()).data
-        drawCity(boardData, this.scene)
+        const cityData = (await net.getCity()).data
+        drawCity(cityData, this.scene)
     }
 }
 

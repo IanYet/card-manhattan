@@ -1,39 +1,36 @@
-import {
-    BoxBufferGeometry,
-    Group,
-    Mesh,
-    MeshBasicMaterial,
-    Scene,
-    Vector3,
-} from 'three'
+import { AxesHelper, Group, Mesh, Scene, Vector3 } from 'three'
 import { STLLoader } from 'threeJSM/loaders/STLLoader.js'
 import { net } from '../net'
+import { girdMatrial } from './material'
 /**
  *
  * @param {{}} data
  * @param {Scene} scene
  */
 const drawCity = (data, scene) => {
+    const cityData = data.city
+    const up = data.up
+
     const cityGroup = new Group()
     cityGroup.userData.type = 'city'
     scene.add(cityGroup)
 
-    const geo = new BoxBufferGeometry(1, 1)
-    const mat = new MeshBasicMaterial({ color: 0xffff00 })
-    const mesh = new Mesh(geo, mat)
-    cityGroup.add(mesh)
+    //axes
+    const axesHelper = new AxesHelper(10000)
+    cityGroup.add(axesHelper)
 
-    const areaIds = Object.keys(data)
+    const areaIds = Object.keys(cityData)
 
     for (let id of areaIds) {
-        const area = data[id]
+        const area = cityData[id]
         const areaGroup = new Group()
         areaGroup.userData.id = id
 
         const idNum = parseInt(id.replace('area', ''))
-        areaGroup.position.setX((idNum % 3) * 3.5 + 1.5)
-        areaGroup.position.setY(parseInt(idNum / 3) * 3.5 + 1.5)
+        areaGroup.position.setX((idNum % 3) * 3000 - 3000)
+        areaGroup.position.setY(1500 - parseInt(idNum / 3) * 3000)
         areaGroup.position.setZ(0)
+        areaGroup.scale.multiplyScalar(0.9)
         cityGroup.add(areaGroup)
 
         for (let x = 0; x < 3; x++) {
@@ -45,14 +42,21 @@ const drawCity = (data, scene) => {
                 areaGroup.add(buildingGroup)
 
                 const loader = new STLLoader()
-                loader.load(`${net.url}grid.stl`, (geo) => {
-                    const mat = new MeshBasicMaterial({ color: 0xff0000 })
-                    const mesh = new Mesh(geo, mat)
+                loader.load(`${net.url}grid.STL`, (geo) => {
+                    geo.translate(-500, -500, -50)
+                    const mesh = new Mesh(geo, girdMatrial)
                     buildingGroup.add(mesh)
 
-                    mesh.position.copy(new Vector3(x + 0.5, y + 0.5, 0))
-                    mesh.scale.copy(new Vector3(0.0009,0.0009,0.0009))
+                    const positionVec = new Vector3(
+                        x * 1000 - 1000,
+                        1000 - y * 1000,
+                        -50
+                    )
+                    mesh.position.copy(positionVec)
+                    mesh.scale.multiplyScalar(0.9)
                 })
+
+                console.log(building);
             }
         }
     }
