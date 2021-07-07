@@ -8,6 +8,7 @@ import {
     AmbientLight,
     HemisphereLight,
     Vector3,
+    OrthographicCamera,
 } from 'three'
 import { OrbitControls } from 'threeJSM/controls/OrbitControls.js'
 import { net } from '../net'
@@ -16,6 +17,7 @@ import { drawCity } from './draw'
 class Board {
     renderer
     camera
+    secondViewCamera
     scene
     controls
 
@@ -26,8 +28,10 @@ class Board {
     constructor(el) {
         this.renderer = this.initRenderer(el)
         this.camera = this.initCamera()
+        this.secondViewCamera = this.initSecondViewCamera()
         this.scene = this.initScene()
         this.controls = this.initControls()
+
         this.initLights()
 
         this.update()
@@ -35,6 +39,12 @@ class Board {
         window.onresize = (ev) => {
             this.camera.aspect = window.innerWidth / window.innerHeight
             this.camera.updateProjectionMatrix()
+
+            this.secondViewCamera.left = window.innerWidth / -2
+            this.secondViewCamera.right = window.innerWidth / 2
+            this.secondViewCamera.top = window.innerHeight / -2
+            this.secondViewCamera.bottom = window.innerHeight / 2
+
             this.renderer.setSize(window.innerWidth, window.innerHeight)
         }
     }
@@ -53,6 +63,7 @@ class Board {
         const renderer = new WebGLRenderer({
             canvas: cav,
             antialias: true,
+            autoClear: false,
         })
 
         renderer.setPixelRatio(window.devicePixelRatio)
@@ -69,11 +80,28 @@ class Board {
         const camera = new PerspectiveCamera(
             75,
             window.innerWidth / window.innerHeight,
-            1,
+            10,
             1000000
         )
-        camera.position.setY(-4000)
-        camera.position.setZ(4000)
+        camera.up.copy(new Vector3(0, 0, 1))
+        camera.position.setY(-4500)
+        camera.position.setZ(4500)
+        return camera
+    }
+
+    initSecondViewCamera() {
+        const camera = new OrthographicCamera(
+            window.innerWidth / -2,
+            window.innerWidth / 2,
+            window.innerHeight / 2,
+            window.innerHeight / -2,
+            10,
+            1000000
+        )
+        camera.up.copy(new Vector3(0, 0, 1))
+        camera.position.copy(new Vector3(-2000, 0, 500))
+        camera.lookAt(new Vector3(0, 0, 0))
+        camera.zoom = 0.1
         return camera
     }
 
@@ -97,7 +125,10 @@ class Board {
             this.camera,
             this.renderer.domElement
         )
-        // controls
+        controls.screenSpacePanning = false
+        controls.enableDamping = true
+        controls.dampingFactor = 0.1
+        controls.maxPolarAngle = Math.PI / 2
 
         return controls
     }
@@ -106,6 +137,10 @@ class Board {
         const light1 = new HemisphereLight(0xffffff, 0xcccccc)
         light1.position.copy(new Vector3(0, 0, 1))
         this.scene.add(light1)
+
+        const light2 = new DirectionalLight(0xffffff, 0.1)
+        light2.position.copy(new Vector3(1, 1, 1))
+        this.scene.add(light2)
     }
 
     setOpt(opt) {}
@@ -113,8 +148,32 @@ class Board {
     update() {
         requestAnimationFrame(() => this.update())
 
-        this.renderer.render(this.scene, this.camera)
         this.controls.update()
+
+        this.renderer.setScissorTest(true)
+
+        this.renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
+        this.renderer.setScissor(0, 0, window.innerWidth, window.innerHeight)
+        this.renderer.render(this.scene, this.camera)
+
+        this.renderer.setViewport(
+            (window.innerWidth * 4) / 5,
+            (window.innerHeight * 4) / 5,
+            window.innerWidth / 5,
+            window.innerHeight / 5
+        )
+        this.renderer.setScissor(
+            (window.innerWidth * 4) / 5,
+            (window.innerHeight * 4) / 5,
+            window.innerWidth / 5,
+            window.innerHeight / 5
+        )
+
+        this.secondViewCamera.updateProjectionMatrix()
+        this.renderer.render(
+            window.axesHelper || this.scene,
+            this.secondViewCamera
+        )
     }
 
     async drawBoard() {
