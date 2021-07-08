@@ -1,0 +1,9 @@
+- 添加地平面
+- 渐变材质，一张大canvas ，uv坐标来实现
+- 发光材质
+- 调整材质metalness 与roughness
+
+---
+
+发光材质map制作，亮起的窗户
+穹顶 sphere
