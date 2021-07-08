@@ -2,6 +2,7 @@
 - 渐变材质，一张大canvas ，uv坐标来实现
 - 发光材质
 - 调整材质metalness 与roughness
+- 切换成react
 
 ---
 
