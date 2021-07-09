@@ -132,9 +132,13 @@ class Board {
         light1.position.copy(new Vector3(0, 0, 1))
         this.scene.add(light1)
 
-        const light2 = new DirectionalLight(0xffffff, 0.1)
-        light2.position.copy(new Vector3(1, -1, 1))
+        const light2 = new DirectionalLight(0xffffff, 0.2)
+        light2.position.copy(new Vector3(1, -2, 0.7))
         this.scene.add(light2)
+
+        const light3 = new DirectionalLight(0xffffff, 0.1)
+        light3.position.copy(new Vector3(1, 2, 0.7))
+        this.scene.add(light3)
     }
 
     initEffect() {

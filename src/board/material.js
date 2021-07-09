@@ -8,6 +8,8 @@ import {
 
 const girdMatrial = new MeshStandardMaterial({
     color: new Color('rgb(226,226,218)'),
+    // emissive: new Color('rgb(226,226,218)'),
+    // emissiveIntensity: 0.3,
     // opacity: 0.9,
     // transparent:true
 })
