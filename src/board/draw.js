@@ -10,7 +10,7 @@ import {
 } from 'three'
 import { STLLoader } from 'threeJSM/loaders/STLLoader.js'
 import { net } from '../net'
-import { chessMatrialMap, girdMatrial } from './material'
+import { chessMatrialMap, girdMatrial, windowMaterial } from './material'
 
 /**
  *
@@ -85,12 +85,11 @@ const drawCity = (data, scene) => {
  * @param {Group} buildingGroup building group
  * @param {[]} building
  */
-const drawBuilding = async (buildingGroup, building) => {
+const drawBuilding = (buildingGroup, building) => {
     if (!building.length) return
 
     const buildingData = [building].flat()
     const floor = buildingData.shift()
-    console.log(floor)
     const [type, idx] = [floor.substr(1), parseInt(floor)]
     const oriHeight =
         buildingGroup.userData.data.reduce(
@@ -101,16 +100,49 @@ const drawBuilding = async (buildingGroup, building) => {
     buildingGroup.userData.data.push(floor)
 
     return new Promise((res, rej) => {
-        const loader = new STLLoader()
-        loader.load(`${net.url}chessman${idx}.STL`, (geo) => {
-            geo.translate(-500, -500, 0 - (500 * idx) / 2)
-            const mat = chessMatrialMap[type]
-            const mesh = new Mesh(geo, mat)
-            buildingGroup.add(mesh)
+        const floorGroup = new Group()
+        buildingGroup.add(floorGroup)
 
-            mesh.position.setZ(oriHeight + (500 * idx) / 2)
-            res()
-        })
+        const geo = new BoxBufferGeometry(900, 900, 500 * idx)
+        const mat = chessMatrialMap[type]
+        const mesh = new Mesh(geo, mat)
+        floorGroup.add(mesh)
+
+        for (let i = 0; i < 4; i++) {
+            for (let f = 0; f < idx; f++) {
+                const plane = new PlaneBufferGeometry(200, 200)
+                const planeMat = windowMaterial
+                const win = new Mesh(plane, planeMat)
+                floorGroup.add(win)
+
+                win.rotateX(Math.PI / 2)
+                win.rotateY(((i % 2) * Math.PI) / 2)
+
+                win.position.setZ(f * 500 - idx * 250 + 250)
+
+                switch (i) {
+                    case 0:
+                        win.position.setX((f % 2) * 450 - 225)
+                        win.position.setY(-451)
+                        break
+                    case 1:
+                        win.position.setX(451)
+                        win.position.setY((f % 2) * 450 - 225)
+                        break
+                    case 2:
+                        win.position.setX(((f + 1) % 2) * 450 - 225)
+                        win.position.setY(451)
+                        break
+                    case 3:
+                        win.position.setX(-451)
+                        win.position.setY(((f + 1) % 2) * 450 - 225)
+                    default:
+                }
+            }
+        }
+        floorGroup.position.setZ(oriHeight + (500 * idx) / 2)
+        floorGroup.rotateX(((oriHeight / 500) % 2) * Math.PI)
+        res()
     }).then(() => drawBuilding(buildingGroup, buildingData))
 }
 export { drawCity }

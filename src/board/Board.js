@@ -8,12 +8,10 @@ import {
     Vector3,
     OrthographicCamera,
     Vector2,
-    ShaderMaterial,
 } from 'three'
 import { OrbitControls } from 'threeJSM/controls/OrbitControls.js'
 import { EffectComposer } from 'threeJSM/postprocessing/EffectComposer.js'
 import { RenderPass } from 'threeJSM/postprocessing/RenderPass.js'
-import { ShaderPass } from 'threeJSM/postprocessing/ShaderPass.js'
 import { UnrealBloomPass } from 'threeJSM/postprocessing/UnrealBloomPass.js'
 
 import { net } from '../net'
@@ -63,7 +61,6 @@ class Board {
             autoClear: false,
         })
 
-        // renderer.setClearColor(0x334257)
         renderer.setPixelRatio(window.devicePixelRatio)
         renderer.setSize(window.innerWidth, window.innerHeight)
 
@@ -131,13 +128,13 @@ class Board {
     }
 
     initLights() {
-        // const light1 = new HemisphereLight(0xffffff, 0xcccccc, 0.5)
-        // light1.position.copy(new Vector3(0, 0, 1))
-        // this.scene.add(light1)
+        const light1 = new HemisphereLight(0xffffff, 0xcccccc, 0.5)
+        light1.position.copy(new Vector3(0, 0, 1))
+        this.scene.add(light1)
 
-        // const light2 = new DirectionalLight(0xffffff, 0.1)
-        // light2.position.copy(new Vector3(1, -1, 1))
-        // this.scene.add(light2)
+        const light2 = new DirectionalLight(0xffffff, 0.1)
+        light2.position.copy(new Vector3(1, -1, 1))
+        this.scene.add(light2)
     }
 
     initEffect() {
@@ -146,12 +143,13 @@ class Board {
             new Vector2(window.innerWidth, window.innerHeight),
             0.8 ,
             0.4,
-            0
+            0.5
+
         )
 
         const bloomComposer = new EffectComposer(this.renderer)
         bloomComposer.addPass(renderScene)
-        bloomComposer.addPass(bloomPass)
+        // bloomComposer.addPass(bloomPass)
         return bloomComposer
     }
 
