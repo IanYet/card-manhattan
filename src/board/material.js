@@ -1,7 +1,8 @@
 import { MeshStandardMaterial } from 'three'
 
 const girdMatrial = new MeshStandardMaterial({
-    color: 0xffffff,
+    color: 0xE7DFD5,
+    
 })
 
 const chessMatrialMap = {

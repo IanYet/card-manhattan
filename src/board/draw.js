@@ -4,6 +4,7 @@ import {
     Group,
     Mesh,
     MeshBasicMaterial,
+    PlaneBufferGeometry,
     Scene,
     Vector3,
 } from 'three'
@@ -24,6 +25,12 @@ const drawCity = (data, scene) => {
     cityGroup.userData.type = 'city'
     cityGroup.userData.up = up
     scene.add(cityGroup)
+
+    const groundGeo = new PlaneBufferGeometry(11500, 7700)
+    const groundMat = new MeshBasicMaterial({ color: 0x334257 })
+    const groundMesh = new Mesh(groundGeo, groundMat)
+    groundMesh.position.setZ(-100)
+    cityGroup.add(groundMesh)
 
     //axes
     const axesHelper = new AxesHelper(10000)
