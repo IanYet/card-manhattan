@@ -7,10 +7,18 @@ import {
     PlaneBufferGeometry,
     Scene,
     Vector3,
+    Color,
 } from 'three'
 import { STLLoader } from 'threeJSM/loaders/STLLoader.js'
 import { net } from '../net'
-import { chessMatrialMap, girdMatrial, windowMaterial } from './material'
+import {
+    chessMatrialMap,
+    girdMatrial,
+    girdMatrial0,
+    windowMaterial,
+} from './material'
+
+// const drawSky = (scene)
 
 /**
  *
@@ -25,12 +33,6 @@ const drawCity = (data, scene) => {
     cityGroup.userData.type = 'city'
     cityGroup.userData.up = up
     scene.add(cityGroup)
-
-    const groundGeo = new PlaneBufferGeometry(11500, 7700)
-    const groundMat = new MeshBasicMaterial({ color: 0x334257 })
-    const groundMesh = new Mesh(groundGeo, groundMat)
-    groundMesh.position.setZ(-100)
-    cityGroup.add(groundMesh)
 
     //axes
     const axesHelper = new AxesHelper(10000)
@@ -59,22 +61,59 @@ const drawCity = (data, scene) => {
                 buildingGroup.userData.data = []
                 areaGroup.add(buildingGroup)
 
-                const loader = new STLLoader()
-                loader.load(`${net.url}grid.STL`, (geo) => {
-                    geo.translate(-500, -500, -50)
-                    const mesh = new Mesh(geo, girdMatrial)
-                    buildingGroup.add(mesh)
+                const positionVec = new Vector3(
+                    x * 1100 - 1100,
+                    1100 - y * 1100,
+                    0
+                )
+                buildingGroup.position.copy(positionVec)
 
-                    const positionVec = new Vector3(
-                        x * 1100 - 1100,
-                        1100 - y * 1100,
-                        0
-                    )
-                    buildingGroup.position.copy(positionVec)
-                    mesh.position.setZ(-50)
+                const gridGroup = new Group()
+                buildingGroup.add(gridGroup)
+                gridGroup.position.setZ(-550)
 
-                    drawBuilding(buildingGroup, building)
-                })
+                // const baseGeo = new BoxBufferGeometry(1000, 1000, 1000)
+                // const base = new Mesh(baseGeo, girdMatrial)
+                // gridGroup.add(base)
+                // base.position.setZ(-50)
+                const top = new Mesh(
+                    new PlaneBufferGeometry(1000, 1000),
+                    girdMatrial
+                )
+                top.position.setZ(450)
+                gridGroup.add(top)
+
+                const front = new Mesh(
+                    new PlaneBufferGeometry(1000, 1000),
+                    girdMatrial0
+                )
+                front.position.set(0, -500, -50)
+                front.rotateZ(Math.PI)
+                front.rotateX(-Math.PI / 2)
+                gridGroup.add(front)
+
+                const back = front.clone()
+                back.position.setY(500)
+                back.rotateY(Math.PI)
+                gridGroup.add(back)
+
+                const left = front.clone()
+                left.position.setY(0)
+                left.position.setX(-500)
+                left.rotateY(Math.PI / 2)
+                gridGroup.add(left)
+
+                const right = left.clone()
+                right.position.setX(500)
+                right.rotateY(Math.PI)
+                gridGroup.add(right)
+
+                const gridGeo = new BoxBufferGeometry(900, 900, 100)
+                const grid = new Mesh(gridGeo, girdMatrial)
+                gridGroup.add(grid)
+                grid.position.setZ(500)
+
+                drawBuilding(buildingGroup, building)
             }
         }
     }

@@ -8,6 +8,9 @@ import {
     Vector3,
     OrthographicCamera,
     Vector2,
+    AmbientLight,
+    SphereBufferGeometry,
+    Mesh,
 } from 'three'
 import { OrbitControls } from 'threeJSM/controls/OrbitControls.js'
 import { EffectComposer } from 'threeJSM/postprocessing/EffectComposer.js'
@@ -17,6 +20,7 @@ import { UnrealBloomPass } from 'threeJSM/postprocessing/UnrealBloomPass.js'
 import { net } from '../net'
 import { drawCity } from './draw'
 import { BLOOM_SCENE } from './constant'
+import { skyMaterial } from './material'
 
 class Board {
     renderer
@@ -40,6 +44,7 @@ class Board {
 
         this.initLights()
         this.initEvents()
+        this.initSky()
 
         this.update()
     }
@@ -106,7 +111,7 @@ class Board {
      */
     initScene() {
         const scene = new Scene()
-        scene.background = new Color(0x334257)
+        scene.background = new Color('rgb(31,50,104)')
         return scene
     }
 
@@ -128,16 +133,21 @@ class Board {
     }
 
     initLights() {
-        const light1 = new HemisphereLight(0xffffff, 0xcccccc, 0.5)
-        light1.position.copy(new Vector3(0, 0, 1))
-        this.scene.add(light1)
+        const light0 = new HemisphereLight(
+            // new Color(0xd8c0cb),
+            new Color(0xf7d7d6),
+            new Color(0xa6afd0),
+            0.9
+        )
+        light0.position.set(0, 0, 1)
+        this.scene.add(light0)
 
-        const light2 = new DirectionalLight(0xffffff, 0.2)
-        light2.position.copy(new Vector3(1, -2, 0.7))
+        const light2 = new DirectionalLight(new Color(0xffffff), 0.25)
+        light2.position.copy(new Vector3(1, -2, 2))
         this.scene.add(light2)
 
-        const light3 = new DirectionalLight(0xffffff, 0.1)
-        light3.position.copy(new Vector3(1, 2, 0.7))
+        const light3 = new DirectionalLight(new Color(0xe3e3e3), 0.15)
+        light3.position.copy(new Vector3(-1, 2, 0))
         this.scene.add(light3)
     }
 
@@ -145,16 +155,23 @@ class Board {
         const renderScene = new RenderPass(this.scene, this.camera)
         const bloomPass = new UnrealBloomPass(
             new Vector2(window.innerWidth, window.innerHeight),
-            0.8 ,
+            0.8,
             0.4,
             0.5
-
         )
 
         const bloomComposer = new EffectComposer(this.renderer)
         bloomComposer.addPass(renderScene)
         // bloomComposer.addPass(bloomPass)
         return bloomComposer
+    }
+
+    initSky() {
+        const geo = new SphereBufferGeometry(10000, 64, 64)
+        const mat = skyMaterial
+        const mesh = new Mesh(geo, mat)
+        mesh.rotateX(Math.PI / 2)
+        this.scene.add(mesh)
     }
 
     initEvents() {

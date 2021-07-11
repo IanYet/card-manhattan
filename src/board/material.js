@@ -1,17 +1,23 @@
 import {
+    BackSide,
     CanvasTexture,
     Color,
     DoubleSide,
     MeshBasicMaterial,
+    MeshLambertMaterial,
     MeshStandardMaterial,
+    Texture,
+    TextureLoader,
 } from 'three'
 
-const girdMatrial = new MeshStandardMaterial({
-    color: new Color('rgb(226,226,218)'),
-    // emissive: new Color('rgb(226,226,218)'),
-    // emissiveIntensity: 0.3,
-    // opacity: 0.9,
-    // transparent:true
+const girdMatrial = new MeshLambertMaterial({
+    color: new Color('rgb(255,255,255)'),
+})
+
+const girdMatrial0 = new MeshLambertMaterial({
+    alphaMap: new TextureLoader().load('./alpha.png'),
+    transparent: true,
+    depthWrite: false,
 })
 
 const chessMatrialMap = {
@@ -30,20 +36,29 @@ const windowMaterial = new MeshStandardMaterial({
     side: DoubleSide,
 })
 
-function generateTexture(color1, color2) {
+const skyMaterial = new MeshBasicMaterial({
+    map: generateTexture('#9cacd0', '#e3c3cb', 512, 256),
+    side: BackSide,
+})
+
+function generateTexture(color1, color2, width, height) {
     const cav = document.createElement('canvas')
-    cav.height = 512
-    cav.width = 512
+    cav.height = height
+    cav.width = width
     const ctx = cav.getContext('2d')
-    const gra = ctx.createLinearGradient(0, 0, 512, 0)
-    gra.addColorStop(0, 'red')
-    gra.addColorStop(1, 'blue')
+    const gra = ctx.createLinearGradient(0, 0, 0, height)
+    gra.addColorStop(0, color2)
+    gra.addColorStop(0.9, color1)
 
     ctx.fillStyle = gra
-    ctx.fillRect(0, 0, 512, 512)
+    ctx.fillRect(0, 0, width, height)
 
     return new CanvasTexture(cav)
 }
-
-generateTexture()
-export { girdMatrial, chessMatrialMap, windowMaterial }
+export {
+    girdMatrial,
+    girdMatrial0,
+    chessMatrialMap,
+    windowMaterial,
+    skyMaterial,
+}
