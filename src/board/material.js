@@ -21,9 +21,9 @@ const girdMatrial0 = new MeshLambertMaterial({
 })
 
 const chessMatrialMap = {
-    red: new MeshStandardMaterial({ color: 0xe29587 }),
-    yellow: new MeshStandardMaterial({ color: 0xf9d56e }),
-    green: new MeshStandardMaterial({ color: 0xa3d2ca }),
+    red: new MeshStandardMaterial({ color: 0xf5e1da }),
+    yellow: new MeshStandardMaterial({ color: 0xFFE194 }),
+    green: new MeshStandardMaterial({ color: 0xC9E4C5 }),
     blue: new MeshStandardMaterial({ color: 0xd0e8f2 }),
 }
 

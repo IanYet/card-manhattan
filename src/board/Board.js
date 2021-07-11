@@ -80,12 +80,13 @@ class Board {
         const camera = new PerspectiveCamera(
             75,
             window.innerWidth / window.innerHeight,
-            10,
+            100,
             1000000
         )
+        window.camera = camera
         camera.up.copy(new Vector3(0, 0, 1))
-        camera.position.setY(-5000)
-        camera.position.setZ(5000)
+        camera.position.setY(-11000)
+        camera.position.setZ(2000)
         return camera
     }
 
@@ -125,9 +126,13 @@ class Board {
             this.renderer.domElement
         )
         controls.screenSpacePanning = false
+        controls.enablePan = false
+        controls.enableZoom = false
         controls.enableDamping = true
         controls.dampingFactor = 0.1
         controls.maxPolarAngle = Math.PI / 2
+
+        controls.target.set(0, 0, 2000)
 
         return controls
     }
@@ -167,7 +172,7 @@ class Board {
     }
 
     initSky() {
-        const geo = new SphereBufferGeometry(10000, 64, 64)
+        const geo = new SphereBufferGeometry(20000, 64, 64)
         const mat = skyMaterial
         const mesh = new Mesh(geo, mat)
         mesh.rotateX(Math.PI / 2)
