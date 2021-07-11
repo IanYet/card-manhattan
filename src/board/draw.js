@@ -35,9 +35,9 @@ const drawCity = (data, scene) => {
     scene.add(cityGroup)
 
     //axes
-    const axesHelper = new AxesHelper(10000)
-    cityGroup.add(axesHelper)
-    window.axesHelper = axesHelper
+    // const axesHelper = new AxesHelper(10000)
+    // cityGroup.add(axesHelper)
+    // window.axesHelper = axesHelper
 
     const areaIds = Object.keys(cityData)
 

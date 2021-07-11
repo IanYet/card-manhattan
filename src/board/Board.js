@@ -205,25 +205,6 @@ class Board {
         this.renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
         this.renderer.setScissor(0, 0, window.innerWidth, window.innerHeight)
         this.composer.render()
-
-        // this.renderer.setViewport(
-        //     (window.innerWidth * 4) / 5,
-        //     (window.innerHeight * 4) / 5,
-        //     window.innerWidth / 5,
-        //     window.innerHeight / 5
-        // )
-        // this.renderer.setScissor(
-        //     (window.innerWidth * 4) / 5,
-        //     (window.innerHeight * 4) / 5,
-        //     window.innerWidth / 5,
-        //     window.innerHeight / 5
-        // )
-
-        // this.secondViewCamera.updateProjectionMatrix()
-        // this.composer.render(
-        //     window.axesHelper || this.scene,
-        //     this.secondViewCamera
-        // )
     }
 
     async drawBoard() {
