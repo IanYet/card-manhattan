@@ -8,18 +8,17 @@ import {
     Vector3,
     OrthographicCamera,
     Vector2,
-    AmbientLight,
     SphereBufferGeometry,
     Mesh,
+    Raycaster,
 } from 'three'
 import { OrbitControls } from 'threeJSM/controls/OrbitControls.js'
-import { EffectComposer } from 'threeJSM/postprocessing/EffectComposer.js'
-import { RenderPass } from 'threeJSM/postprocessing/RenderPass.js'
-import { UnrealBloomPass } from 'threeJSM/postprocessing/UnrealBloomPass.js'
+// import { EffectComposer } from 'threeJSM/postprocessing/EffectComposer.js'
+// import { RenderPass } from 'threeJSM/postprocessing/RenderPass.js'
+// import { UnrealBloomPass } from 'threeJSM/postprocessing/UnrealBloomPass.js'
 
-import { net } from '../net'
+import { status } from './status'
 import { drawCity } from './draw'
-import { BLOOM_SCENE } from './constant'
 import { skyMaterial } from './material'
 
 class Board {
@@ -28,7 +27,8 @@ class Board {
     secondViewCamera
     scene
     controls
-    composer
+    raycaster
+    mouse
 
     /**
      *
@@ -40,7 +40,8 @@ class Board {
         this.secondViewCamera = this.initSecondViewCamera()
         this.scene = this.initScene()
         this.controls = this.initControls()
-        this.composer = this.initEffect()
+        this.mouse = new Vector2()
+        this.raycaster = this.initRaycaster()
 
         this.initLights()
         this.initEvents()
@@ -126,8 +127,6 @@ class Board {
             this.renderer.domElement
         )
         controls.screenSpacePanning = false
-        controls.enablePan = false
-        controls.enableZoom = false
         controls.enableDamping = true
         controls.dampingFactor = 0.1
         controls.maxPolarAngle = Math.PI / 2
@@ -156,21 +155,6 @@ class Board {
         this.scene.add(light3)
     }
 
-    initEffect() {
-        const renderScene = new RenderPass(this.scene, this.camera)
-        const bloomPass = new UnrealBloomPass(
-            new Vector2(window.innerWidth, window.innerHeight),
-            0.8,
-            0.4,
-            0.5
-        )
-
-        const bloomComposer = new EffectComposer(this.renderer)
-        bloomComposer.addPass(renderScene)
-        // bloomComposer.addPass(bloomPass)
-        return bloomComposer
-    }
-
     initSky() {
         const geo = new SphereBufferGeometry(20000, 64, 64)
         const mat = skyMaterial
@@ -193,6 +177,12 @@ class Board {
         }
     }
 
+    initRaycaster() {
+        const raycaster = new Raycaster()
+        raycaster.setFromCamera(this.mouse, this.camera)
+        return raycaster
+    }
+
     setOpt(opt) {}
 
     update() {
@@ -200,11 +190,12 @@ class Board {
 
         this.controls.update()
 
-        this.renderer.setScissorTest(true)
+        // this.renderer.setScissorTest(true)
 
-        this.renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
-        this.renderer.setScissor(0, 0, window.innerWidth, window.innerHeight)
-        this.composer.render()
+        // this.renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
+        // this.renderer.setScissor(0, 0, window.innerWidth, window.innerHeight)
+        // this.composer.render()
+        this.renderer.render(this.scene, this.camera)
 
         // this.renderer.setViewport(
         //     (window.innerWidth * 4) / 5,
@@ -227,8 +218,9 @@ class Board {
     }
 
     async drawBoard() {
-        const cityData = (await net.getCity()).data
-        drawCity(cityData, this.scene)
+        await status.getUp()
+        await status.getCity()
+        drawCity(this.scene)
     }
 }
 

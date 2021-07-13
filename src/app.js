@@ -1,5 +1,5 @@
 import style from './app.module.css'
-import { Board } from './board'
+import { Board } from './Board'
 
 async function main() {
     const app = document.getElementById('app')

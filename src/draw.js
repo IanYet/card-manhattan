@@ -3,14 +3,10 @@ import {
     BoxBufferGeometry,
     Group,
     Mesh,
-    MeshBasicMaterial,
     PlaneBufferGeometry,
     Scene,
     Vector3,
-    Color,
 } from 'three'
-import { STLLoader } from 'threeJSM/loaders/STLLoader.js'
-import { net } from '../net'
 import {
     chessMatrialMap,
     girdMatrial,
@@ -18,20 +14,18 @@ import {
     windowMaterial,
 } from './material'
 
-// const drawSky = (scene)
+import { status } from './status'
 
 /**
  *
- * @param {{}} data
  * @param {Scene} scene
  */
-const drawCity = (data, scene) => {
-    const cityData = data.city
-    const up = data.up
+const drawCity = (scene) => {
+    const cityData = status.cityData
+    const up = status.up
 
     const cityGroup = new Group()
     cityGroup.userData.type = 'city'
-    cityGroup.userData.up = up
     scene.add(cityGroup)
 
     //axes
@@ -51,6 +45,7 @@ const drawCity = (data, scene) => {
         areaGroup.position.setY(1800 - parseInt(idNum / 3) * 3600)
         areaGroup.position.setZ(0)
         cityGroup.add(areaGroup)
+        status.areas.push(areaGroup)
 
         for (let x = 0; x < 3; x++) {
             for (let y = 0; y < 3; y++) {
@@ -60,6 +55,7 @@ const drawCity = (data, scene) => {
                 buildingGroup.userData.id = `city-${id}-${x}-${y}`
                 buildingGroup.userData.data = []
                 areaGroup.add(buildingGroup)
+                status.buildings.push(buildingGroup)
 
                 const positionVec = new Vector3(
                     x * 1100 - 1100,
@@ -72,10 +68,6 @@ const drawCity = (data, scene) => {
                 buildingGroup.add(gridGroup)
                 gridGroup.position.setZ(-550)
 
-                // const baseGeo = new BoxBufferGeometry(1000, 1000, 1000)
-                // const base = new Mesh(baseGeo, girdMatrial)
-                // gridGroup.add(base)
-                // base.position.setZ(-50)
                 const top = new Mesh(
                     new PlaneBufferGeometry(1000, 1000),
                     girdMatrial
@@ -184,4 +176,4 @@ const drawBuilding = (buildingGroup, building) => {
         res()
     }).then(() => drawBuilding(buildingGroup, buildingData))
 }
-export { drawCity }
+export { drawCity, drawBuilding }

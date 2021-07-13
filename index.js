@@ -1,8 +1,8 @@
 import './index.css'
 import { main } from './src/app'
-import { net } from './src/net'
+import { status } from './src/status'
 
 
-net.setUrl('http://localhost:3000/')
-net.setKey('123')
+status.setUrl('./')
+status.setKey('123')
 main()

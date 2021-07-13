@@ -6,7 +6,6 @@ import {
     MeshBasicMaterial,
     MeshLambertMaterial,
     MeshStandardMaterial,
-    Texture,
     TextureLoader,
 } from 'three'
 
