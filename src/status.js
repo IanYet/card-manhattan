@@ -3,6 +3,10 @@ import axios from 'axios'
 const status = {
     url: '',
     key: '',
+    up: '',
+    cityData: '',
+    areas: [],
+    buildings: [],
     setUrl: (url) => (status.url = url),
     setKey: (key) => (status.key = key),
     getCity: async () =>
@@ -15,11 +19,6 @@ const status = {
             status.up = data.data.up
             return status.up
         }),
-
-    up: '',
-    cityData: '',
-    areas: [],
-    buildings: [],
 }
 
 export { status }
