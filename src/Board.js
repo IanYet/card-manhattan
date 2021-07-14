@@ -242,11 +242,13 @@ class Board {
         this.controls.target.copy(status.oriViewState.controls.target)
     }
 
-    toggleMode() {
-        this.mode =
-            this.mode === constant.VIEW_MODE
-                ? constant.OPER_MODE
-                : constant.VIEW_MODE
+    /**
+     *
+     * @param {string} mode constant.VIEW_MODE | constant.VIEW_MODE
+     */
+    changeMode(mode) {
+        this.mode = mode
+        status.mode = this.mode
     }
 }
 

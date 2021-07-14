@@ -13,14 +13,33 @@ const findGroup = (object, groupType) => {
 
 const operate = {
     raycaster: null,
+    intersectObject: null,
 
-    choose: (type, objs) => (ev) => {
+    choose(objs, type) {
         const subMesh = operate.raycaster.intersectObjects(objs, true)[0]
             ?.object
 
         if (!subMesh) return
 
-        const group = findGroup(subMesh, type)
+        return findGroup(subMesh, type)
+    },
+    handleViewModeMove(ev) {
+        if (status.mode === constant.OPER_MODE) return
+
+        const floor = operate.choose(status.floors, constant.FLOOR_GROUP)
+
+        if (operate.intersectObject !== floor) {
+            operate.intersectObject?.scale.set(1, 1, 1)
+        }
+
+        operate.intersectObject = floor
+        operate.intersectObject?.scale.set(1.1, 1.1, 1.1)
+    },
+    handleOperModeMove(ev) {
+        if (status.mode === constant.VIEW_MODE) return
+        
+        const area = operate.choose(status.areas, constant.AREA_GROUP)
+        // const building = area.children.find(b => b.userData)
     },
     /**
      *
@@ -29,7 +48,8 @@ const operate = {
      */
     start(el, raycaster) {
         operate.raycaster = raycaster
-        el.onclick = operate.choose(constant.FLOOR_GROUP, status.floors)
+        el.onpointermove = operate.handleViewModeMove
+        // el.onclick = operate.choose(constant.FLOOR_GROUP, status.floors)
     },
 }
 

@@ -1,18 +1,22 @@
 {
     "city": {
         "area0": [
-            [[], [], ["1green","3red"]],
-            [["2red","2yellow"], ["2yellow"], []],
+            [[], [], ["1green", "3red"]],
+            [["2red", "2yellow"], ["2yellow"], []],
             [[], [], ["2blue"]]
         ],
         "area1": [
             [[], [], []],
-            [["4green","3yellow"], ["9blue"], []],
-            [[], [], ["4green","4yellow","4red"]]
+            [["4green", "3yellow"], ["3blue", "3blue", "3blue"], []],
+            [[], [], ["4green", "4yellow", "4red"]]
         ],
         "area2": [
-            [[], ["5red"], []],
-            [["6green"], [], ["1yellow"]],
+            [[], ["1red", "4red"], []],
+            [
+                ["1green", "1green", "1green", "1green", "1green", "1green"],
+                [],
+                ["1yellow"]
+            ],
             [[], ["4yellow"], []]
         ],
         "area3": [
@@ -22,13 +26,13 @@
         ],
         "area4": [
             [[], [], []],
-            [[], ["1yellow","1red","1blue"], []],
+            [[], ["1yellow", "1red", "1blue"], []],
             [[], [], []]
         ],
         "area5": [
             [[], [], []],
             [["2yellow"], [], []],
-            [[], [], ["1green","1red","1green"]]
+            [[], [], ["1green", "1red", "1green"]]
         ]
     }
 }

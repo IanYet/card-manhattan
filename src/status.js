@@ -18,11 +18,14 @@ const status = {
     cityData: {},
     areas: [],
     buildings: [],
-    floors:[],
+    floors: [],
     oriViewState: {
         camera: {},
         controls: {},
     },
+    mode: constant.VIEW_MODE,
+    playedChess: '2red',
+    playedCard: [1, 0],
 
     setUrl: (url) => (status.url = url),
     setKey: (key) => (status.key = key),
