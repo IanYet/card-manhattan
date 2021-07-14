@@ -14,16 +14,13 @@ const findGroup = (object, groupType) => {
 const operate = {
     raycaster: null,
 
-    chooseBuilding(ev) {
-        const buildingSubMesh = operate.raycaster.intersectObjects(
-            status.buildings,
-            true
-        )[0]?.object
+    choose: (type, objs) => (ev) => {
+        const subMesh = operate.raycaster.intersectObjects(objs, true)[0]
+            ?.object
 
-        if (!buildingSubMesh) return
+        if (!subMesh) return
 
-        const building = findGroup(buildingSubMesh, constant.BUILDING_GROUP)
-        console.log(building)
+        const group = findGroup(subMesh, type)
     },
     /**
      *
@@ -32,7 +29,7 @@ const operate = {
      */
     start(el, raycaster) {
         operate.raycaster = raycaster
-        el.onclick = operate.chooseBuilding
+        el.onclick = operate.choose(constant.FLOOR_GROUP, status.floors)
     },
 }
 
