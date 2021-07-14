@@ -13,11 +13,8 @@ import {
     Raycaster,
 } from 'three'
 import { OrbitControls } from 'threeJSM/controls/OrbitControls.js'
-// import { EffectComposer } from 'threeJSM/postprocessing/EffectComposer.js'
-// import { RenderPass } from 'threeJSM/postprocessing/RenderPass.js'
-// import { UnrealBloomPass } from 'threeJSM/postprocessing/UnrealBloomPass.js'
 
-import { status } from './status'
+import { constant, status } from './status'
 import { drawCity } from './draw'
 import { skyMaterial } from './material'
 
@@ -29,6 +26,7 @@ class Board {
     controls
     raycaster
     mouse
+    mode
 
     /**
      *
@@ -42,6 +40,7 @@ class Board {
         this.controls = this.initControls()
         this.mouse = new Vector2()
         this.raycaster = this.initRaycaster()
+        this.mode = constant.VIEW_MODE
 
         this.initLights()
         this.initEvents()
@@ -88,6 +87,11 @@ class Board {
         camera.up.copy(new Vector3(0, 0, 1))
         camera.position.setY(-11000)
         camera.position.setZ(2000)
+
+        status.oriViewState.camera = {
+            position: new Vector3().copy(camera.position),
+            up: new Vector3(0, 0, 1),
+        }
         return camera
     }
 
@@ -132,6 +136,9 @@ class Board {
         controls.maxPolarAngle = Math.PI / 2
 
         controls.target.set(0, 0, 2000)
+        status.oriViewState.controls = {
+            target: new Vector3().copy(controls.target),
+        }
 
         return controls
     }
@@ -175,6 +182,10 @@ class Board {
 
             this.renderer.setSize(window.innerWidth, window.innerHeight)
         }
+        window.onpointermove = (event) => {
+            this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+            this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+        }
     }
 
     initRaycaster() {
@@ -189,12 +200,14 @@ class Board {
         requestAnimationFrame(() => this.update())
 
         this.controls.update()
+        this.raycaster.setFromCamera(this.mouse, this.camera)
 
         // this.renderer.setScissorTest(true)
 
         // this.renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
         // this.renderer.setScissor(0, 0, window.innerWidth, window.innerHeight)
         // this.composer.render()
+
         this.renderer.render(this.scene, this.camera)
 
         // this.renderer.setViewport(
@@ -221,6 +234,19 @@ class Board {
         await status.getUp()
         await status.getCity()
         drawCity(this.scene)
+    }
+
+    resetViewState() {
+        this.camera.position.copy(status.oriViewState.camera.position)
+        this.camera.up.copy(status.oriViewState.camera.up)
+        this.controls.target.copy(status.oriViewState.controls.target)
+    }
+
+    toggleMode() {
+        this.mode =
+            this.mode === constant.VIEW_MODE
+                ? constant.OPER_MODE
+                : constant.VIEW_MODE
     }
 }
 

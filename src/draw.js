@@ -14,7 +14,7 @@ import {
     windowMaterial,
 } from './material'
 
-import { status } from './status'
+import { constant, status } from './status'
 
 /**
  *
@@ -25,7 +25,7 @@ const drawCity = (scene) => {
     const up = status.up
 
     const cityGroup = new Group()
-    cityGroup.userData.type = 'city'
+    cityGroup.userData.type = constant.CITY_GROUP
     scene.add(cityGroup)
 
     //axes
@@ -39,32 +39,40 @@ const drawCity = (scene) => {
         const area = cityData[id]
         const areaGroup = new Group()
         areaGroup.userData.id = id
+        areaGroup.userData.type = constant.AREA_GROUP
 
         const idNum = parseInt(id.replace('area', ''))
         areaGroup.position.setX((idNum % 3) * 3600 - 3600)
         areaGroup.position.setY(1800 - parseInt(idNum / 3) * 3600)
         areaGroup.position.setZ(0)
+
+        //up rotate
+        areaGroup.rotateZ((up / 360) * Math.PI * 2)
+
         cityGroup.add(areaGroup)
         status.areas.push(areaGroup)
 
         for (let x = 0; x < 3; x++) {
             for (let y = 0; y < 3; y++) {
-                const building = area[y][x]
+                const building = area[x][y]
 
                 const buildingGroup = new Group()
-                buildingGroup.userData.id = `city-${id}-${x}-${y}`
+                buildingGroup.userData.id = `${id}-${x}-${y}`
                 buildingGroup.userData.data = []
+                buildingGroup.userData.type = constant.BUILDING_GROUP
+
                 areaGroup.add(buildingGroup)
                 status.buildings.push(buildingGroup)
 
                 const positionVec = new Vector3(
-                    x * 1100 - 1100,
-                    1100 - y * 1100,
+                    y * 1100 - 1100,
+                    1100 - x * 1100,
                     0
                 )
                 buildingGroup.position.copy(positionVec)
 
                 const gridGroup = new Group()
+                gridGroup.userData.type = constant.GRID_GROUP
                 buildingGroup.add(gridGroup)
                 gridGroup.position.setZ(-550)
 
@@ -119,19 +127,22 @@ const drawCity = (scene) => {
 const drawBuilding = (buildingGroup, building) => {
     if (!building.length) return
 
-    const buildingData = [building].flat()
-    const floor = buildingData.shift()
-    const [type, idx] = [floor.substr(1), parseInt(floor)]
+    const buildingData = [...building]
+    const floorData = buildingData.shift()
+    const [type, idx] = [floorData.substr(1), parseInt(floorData)]
     const oriHeight =
         buildingGroup.userData.data.reduce(
             (pre, cur) => pre + parseInt(cur),
             0
         ) * 500
 
-    buildingGroup.userData.data.push(floor)
+    buildingGroup.userData.data.push(floorData)
 
     return new Promise((res, rej) => {
         const floorGroup = new Group()
+        floorGroup.userData.type = constant.FLOOR_GROUP
+        floorGroup.userData.data = floorData
+        status.floors.push(floorGroup)
         buildingGroup.add(floorGroup)
 
         const geo = new BoxBufferGeometry(900, 900, 500 * idx)
