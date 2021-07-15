@@ -1,5 +1,11 @@
-// const store = {
-//     gameBoard: null,
-// }
+const store = {
+    cityData: {},
+    cardData: {},
+    chessData: {},
 
-// export { store }
+    usedCardData: {},
+    usedChessData: {},
+    leftChessData: {},
+}
+
+export { store }
