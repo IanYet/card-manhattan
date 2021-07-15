@@ -143,11 +143,21 @@ const drawBuilding = (buildingGroup, buildingData) => {
 
     return new Promise((res, rej) => {
         const floorGroup = generateFloor(floorData)
-        status.floors.push(floorGroup)
-        buildingGroup.add(floorGroup)
 
         floorGroup.position.setZ(oriHeight + (500 * parseInt(floorData)) / 2)
-        floorGroup.rotateX(((oriHeight / 500) % 2) * Math.PI)
+
+        if ((oriHeight / 500) % 2) {
+            if (parseInt(floorData) % 2) {
+                floorGroup.rotateX(Math.PI)
+            } else {
+                buildingGroup.children[
+                    buildingGroup.children.length - 1
+                ].rotateX(Math.PI)
+            }
+        }
+
+        status.floors.push(floorGroup)
+        buildingGroup.add(floorGroup)
         res()
     }).then(() => drawBuilding(buildingGroup, buildingData))
 }
