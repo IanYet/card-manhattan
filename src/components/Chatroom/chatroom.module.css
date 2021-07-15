@@ -1,0 +1,14 @@
+.chatroom {
+    position: fixed;
+    z-index: 10;
+    background-color: white;
+
+    top: 2rem;
+    left: 0;
+
+    width: 12rem;
+    min-height: 40rem;
+
+    box-sizing: border-box;
+    border-radius: 0 6px 6px 0;
+}

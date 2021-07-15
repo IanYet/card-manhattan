@@ -1,5 +1,8 @@
 import { useEffect } from 'react'
 import './App.css'
+import { Chatroom } from './components/Chatroom'
+import { DashBoard } from './components/DashBoard'
+import { InfoPanel } from './components/InfoPanel'
 import { Stage } from './components/Stage'
 import { status as gameStatus } from './game'
 
@@ -11,6 +14,9 @@ function App() {
 
     return (
         <div className='App'>
+            <Chatroom />
+            <DashBoard />
+            <InfoPanel />
             <Stage />
         </div>
     )

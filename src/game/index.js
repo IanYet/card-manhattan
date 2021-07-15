@@ -1,2 +1,3 @@
-export { startGame } from './app'
-export { status } from './status'
+export { board, startGame } from './app'
+export { status, constant } from './status'
+export { operate } from './operate'

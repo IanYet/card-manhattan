@@ -21,6 +21,7 @@ import TWEEN from '@tweenjs/tween.js'
 import { operate } from './operate'
 
 class Board {
+    el
     renderer
     camera
     secondViewCamera
@@ -34,7 +35,7 @@ class Board {
      *
      * @param {HTMLElement} el
      */
-    constructor(el) {
+    init(el) {
         this.renderer = this.initRenderer(el)
         this.camera = this.initCamera()
         this.secondViewCamera = this.initSecondViewCamera()

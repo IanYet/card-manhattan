@@ -1,0 +1,15 @@
+.dash {
+    position: fixed;
+    z-index: 10;
+    bottom: 0;
+    height: 10rem;
+    background-color: white;
+
+    width: 60vw;
+    min-width: 20rem;
+    left: 20vw;
+
+    box-sizing: border-box;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}

@@ -1,0 +1,14 @@
+.info {
+    position: fixed;
+    z-index: 10;
+    background-color: white;
+
+    top: 2rem;
+    right: 0;
+
+    width: 12rem;
+    min-height: 40rem;
+
+    box-sizing: border-box;
+    border-radius: 6px 0 0 6px;
+}
