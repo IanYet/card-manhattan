@@ -4,6 +4,9 @@ const constant = {
     VIEW_MODE: 0,
     OPER_MODE: 1,
 
+    TEMP_FLOOR: 0,
+    REAL_FLOOR: 1,
+
     CITY_GROUP: 'city',
     AREA_GROUP: 'area',
     BUILDING_GROUP: 'building',

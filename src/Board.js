@@ -17,6 +17,8 @@ import { OrbitControls } from 'threeJSM/controls/OrbitControls.js'
 import { constant, status } from './status'
 import { drawCity } from './draw'
 import { skyMaterial } from './material'
+import TWEEN from '@tweenjs/tween.js'
+import { operate } from './operate'
 
 class Board {
     renderer
@@ -198,6 +200,7 @@ class Board {
 
     update() {
         requestAnimationFrame(() => this.update())
+        TWEEN.update()
 
         this.controls.update()
         this.raycaster.setFromCamera(this.mouse, this.camera)
@@ -249,6 +252,13 @@ class Board {
     changeMode(mode) {
         this.mode = mode
         status.mode = this.mode
+
+        if (mode === constant.OPER_MODE) {
+            operate.createTempFloor()
+        } else {
+            status.playedCard = []
+            status.playedChess = ''
+        }
     }
 }
 

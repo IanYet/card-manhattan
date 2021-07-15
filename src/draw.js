@@ -11,6 +11,7 @@ import {
     chessMatrialMap,
     girdMatrial,
     girdMatrial0,
+    tempChessMaterialMap,
     windowMaterial,
 } from './material'
 
@@ -54,7 +55,9 @@ const drawCity = (scene) => {
 
         for (let x = 0; x < 3; x++) {
             for (let y = 0; y < 3; y++) {
-                const building = area[x][y]
+                const buildingData = [...area[x][y]]
+                //第一次清空原json
+                area[x][y].length = 0
 
                 const buildingGroup = new Group()
                 buildingGroup.userData.id = `${id}-${x}-${y}`
@@ -113,7 +116,7 @@ const drawCity = (scene) => {
                 gridGroup.add(grid)
                 grid.position.setZ(500)
 
-                drawBuilding(buildingGroup, building)
+                drawBuilding(buildingGroup, buildingData)
             }
         }
     }
@@ -122,69 +125,116 @@ const drawCity = (scene) => {
 /**
  *
  * @param {Group} buildingGroup building group
- * @param {[]} building
+ * @param {[string]} buildingData
  */
-const drawBuilding = (buildingGroup, building) => {
-    if (!building.length) return
+const drawBuilding = (buildingGroup, buildingData) => {
+    if (!buildingData.length) return
 
-    const buildingData = [...building]
     const floorData = buildingData.shift()
-    const [type, idx] = [floorData.substr(1), parseInt(floorData)]
     const oriHeight =
         buildingGroup.userData.data.reduce(
             (pre, cur) => pre + parseInt(cur),
             0
         ) * 500
+    const [areaKey, x, y] = buildingGroup.userData.id.split('-')
+    //keep json data same
+    status.cityData[areaKey][x][y].push(floorData)
 
     buildingGroup.userData.data.push(floorData)
 
     return new Promise((res, rej) => {
-        const floorGroup = new Group()
-        floorGroup.userData.type = constant.FLOOR_GROUP
-        floorGroup.userData.data = floorData
+        const floorGroup = generateFloor(floorData)
         status.floors.push(floorGroup)
         buildingGroup.add(floorGroup)
 
-        const geo = new BoxBufferGeometry(900, 900, 500 * idx)
-        const mat = chessMatrialMap[type]
-        const mesh = new Mesh(geo, mat)
-        floorGroup.add(mesh)
-
-        for (let i = 0; i < 4; i++) {
-            for (let f = 0; f < idx; f++) {
-                const plane = new PlaneBufferGeometry(200, 200)
-                const planeMat = windowMaterial
-                const win = new Mesh(plane, planeMat)
-                floorGroup.add(win)
-
-                win.rotateX(Math.PI / 2)
-                win.rotateY(((i % 2) * Math.PI) / 2)
-
-                win.position.setZ(f * 500 - idx * 250 + 250)
-
-                switch (i) {
-                    case 0:
-                        win.position.setX((f % 2) * 450 - 225)
-                        win.position.setY(-451)
-                        break
-                    case 1:
-                        win.position.setX(451)
-                        win.position.setY((f % 2) * 450 - 225)
-                        break
-                    case 2:
-                        win.position.setX(((f + 1) % 2) * 450 - 225)
-                        win.position.setY(451)
-                        break
-                    case 3:
-                        win.position.setX(-451)
-                        win.position.setY(((f + 1) % 2) * 450 - 225)
-                    default:
-                }
-            }
-        }
-        floorGroup.position.setZ(oriHeight + (500 * idx) / 2)
+        floorGroup.position.setZ(oriHeight + (500 * parseInt(floorData)) / 2)
         floorGroup.rotateX(((oriHeight / 500) % 2) * Math.PI)
         res()
     }).then(() => drawBuilding(buildingGroup, buildingData))
 }
-export { drawCity, drawBuilding }
+
+/**
+ * 与drawBuilding不同之处在于，这个方法直接传入生成好的floorGroup，并且不会改动status里的citydata，也不会改动buildingGroup的userdata
+ * @param {Group} buildingGroup
+ * @param {Group} floor
+ */
+const addFloor = (buildingGroup, floor) => {
+    const oriHeight =
+        buildingGroup.userData.data.reduce(
+            (pre, cur) => pre + parseInt(cur),
+            0
+        ) * 500
+    const floorData = floor.userData.data
+
+    buildingGroup.add(floor)
+    floor.position.setZ(oriHeight + (500 * parseInt(floorData)) / 2)
+    floor.rotateX(((oriHeight / 500) % 2) * Math.PI)
+}
+
+/**
+ *
+ * @param {Group} buildingGroup
+ * @param {Group} floor
+ */
+const removeFloor = (buildingGroup, floor) => {
+    buildingGroup.remove(floor)
+}
+
+/**
+ *
+ * @param {string} floorData
+ * @param {} type
+ * @returns {Group}
+ */
+const generateFloor = (floorData, type = constant.REAL_FLOOR) => {
+    const [colorType, idx] = [floorData.substr(1), parseInt(floorData)]
+    const floorGroup = new Group()
+
+    floorGroup.userData.type = constant.FLOOR_GROUP
+    floorGroup.userData.data = floorData
+
+    const geo = new BoxBufferGeometry(900, 900, 500 * idx)
+    const mat =
+        type === constant.REAL_FLOOR
+            ? chessMatrialMap[colorType]
+            : tempChessMaterialMap[colorType]
+    const mesh = new Mesh(geo, mat)
+    floorGroup.add(mesh)
+
+    for (let i = 0; i < 4; i++) {
+        for (let f = 0; f < idx; f++) {
+            const plane = new PlaneBufferGeometry(200, 200)
+            const planeMat = windowMaterial
+            const win = new Mesh(plane, planeMat)
+            floorGroup.add(win)
+
+            win.rotateX(Math.PI / 2)
+            win.rotateY(((i % 2) * Math.PI) / 2)
+
+            win.position.setZ(f * 500 - idx * 250 + 250)
+
+            switch (i) {
+                case 0:
+                    win.position.setX((f % 2) * 450 - 225)
+                    win.position.setY(-451)
+                    break
+                case 1:
+                    win.position.setX(451)
+                    win.position.setY((f % 2) * 450 - 225)
+                    break
+                case 2:
+                    win.position.setX(((f + 1) % 2) * 450 - 225)
+                    win.position.setY(451)
+                    break
+                case 3:
+                    win.position.setX(-451)
+                    win.position.setY(((f + 1) % 2) * 450 - 225)
+                default:
+            }
+        }
+    }
+
+    return floorGroup
+}
+
+export { drawCity, drawBuilding, generateFloor, addFloor, removeFloor }

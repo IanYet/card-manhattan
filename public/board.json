@@ -11,7 +11,7 @@
             [[], [], ["4green", "4yellow", "4red"]]
         ],
         "area2": [
-            [[], ["1red", "4red"], []],
+            [[], ["1red", "4red", "2red"], []],
             [
                 ["1green", "1green", "1green", "1green", "1green", "1green"],
                 [],

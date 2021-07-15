@@ -21,9 +21,32 @@ const girdMatrial0 = new MeshLambertMaterial({
 
 const chessMatrialMap = {
     red: new MeshStandardMaterial({ color: 0xf5e1da }),
-    yellow: new MeshStandardMaterial({ color: 0xFFE194 }),
-    green: new MeshStandardMaterial({ color: 0xC9E4C5 }),
+    yellow: new MeshStandardMaterial({ color: 0xffe194 }),
+    green: new MeshStandardMaterial({ color: 0xc9e4c5 }),
     blue: new MeshStandardMaterial({ color: 0xd0e8f2 }),
+}
+
+const tempChessMaterialMap = {
+    red: new MeshStandardMaterial({
+        color: 0xf5e1da,
+        transparent: true,
+        opacity: 0.5,
+    }),
+    yellow: new MeshStandardMaterial({
+        color: 0xffe194,
+        transparent: true,
+        opacity: 0.5,
+    }),
+    green: new MeshStandardMaterial({
+        color: 0xc9e4c5,
+        transparent: true,
+        opacity: 0.5,
+    }),
+    blue: new MeshStandardMaterial({
+        color: 0xd0e8f2,
+        transparent: true,
+        opacity: 0.5,
+    }),
 }
 
 const windowMaterial = new MeshStandardMaterial({
@@ -58,6 +81,7 @@ export {
     girdMatrial,
     girdMatrial0,
     chessMatrialMap,
+    tempChessMaterialMap,
     windowMaterial,
     skyMaterial,
 }
