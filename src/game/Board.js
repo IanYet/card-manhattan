@@ -12,7 +12,7 @@ import {
     Mesh,
     Raycaster,
 } from 'three'
-import { OrbitControls } from 'threeJSM/controls/OrbitControls.js'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 import { constant, status } from './status'
 import { drawCity } from './draw'

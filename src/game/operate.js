@@ -1,5 +1,4 @@
 import TWEEN, { Tween } from '@tweenjs/tween.js'
-import { Raycaster } from 'three'
 import { addFloor, generateFloor, removeFloor } from './draw'
 import { constant, status } from './status'
 import { utils } from './utils'

@@ -4,7 +4,6 @@ import {
     Group,
     Mesh,
     PlaneBufferGeometry,
-    Scene,
     Vector3,
 } from 'three'
 import {
@@ -229,6 +228,7 @@ const generateFloor = (floorData, type = constant.REAL_FLOOR) => {
                 case 3:
                     win.position.setX(-451)
                     win.position.setY(((f + 1) % 2) * 450 - 225)
+                    break
                 default:
             }
         }
