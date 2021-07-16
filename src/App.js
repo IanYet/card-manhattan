@@ -1,15 +1,19 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import { Chatroom } from './components/Chatroom'
 import { DashBoard } from './components/DashBoard'
 import { InfoPanel } from './components/InfoPanel'
 import { Stage } from './components/Stage'
-import { status as gameStatus } from './game'
+import { net } from './net'
 
 function App() {
+    const [renderStage, startRenderStage] = useState(false)
     useEffect(() => {
-        gameStatus.setUrl('./')
-        gameStatus.setKey('123')
+        net.setUrl('./')
+        net.setKey('123')
+        net.getInitData().then(() => {
+            startRenderStage(true)
+        })
     }, [])
 
     return (
@@ -17,7 +21,7 @@ function App() {
             <Chatroom />
             <DashBoard />
             <InfoPanel />
-            <Stage />
+            <Stage render={renderStage} />
         </div>
     )
 }

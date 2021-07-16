@@ -234,10 +234,8 @@ class Board {
         // )
     }
 
-    async drawBoard() {
-        await status.getUp()
-        await status.getCity()
-        drawCity(this.scene)
+    drawBoard(up, cityData) {
+        drawCity(this.scene, up, cityData)
     }
 
     resetViewState() {

@@ -1,5 +1,6 @@
 {
-    "city": {
+    "up": 0,
+    "cityData": {
         "area0": [
             [[], [], ["1green", "3red"]],
             [["2red", "2yellow"], ["2yellow"], []],
@@ -34,5 +35,7 @@
             [["2yellow"], [], []],
             [[], [], ["1green", "1red", "1green"]]
         ]
-    }
+    },
+    "cardData": [],
+    "chessData": []
 }

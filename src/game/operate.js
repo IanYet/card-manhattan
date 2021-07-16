@@ -100,7 +100,7 @@ const operate = {
         el.addEventListener('pointermove', operate.handleViewModeMove)
         el.addEventListener('pointermove', operate.handleOperModeMove)
         el.onclick = (ev) => {
-            console.log(status.cityData)
+            // console.log(status.cityData)
         }
     },
 }
