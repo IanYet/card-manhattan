@@ -7,21 +7,25 @@ import { Stage } from './components/Stage'
 import { net } from './net'
 
 function App() {
-    const [renderStage, startRenderStage] = useState(false)
+    const [isRender, startRender] = useState(false)
     useEffect(() => {
         net.setUrl('./')
         net.setKey('123')
         net.getInitData().then(() => {
-            startRenderStage(true)
+            startRender(true)
         })
     }, [])
 
     return (
         <div className='App'>
-            <Chatroom />
-            <DashBoard />
-            <InfoPanel />
-            <Stage render={renderStage} />
+            {isRender ? (
+                <>
+                    <Chatroom />
+                    <DashBoard />
+                    <InfoPanel />
+                    <Stage />
+                </>
+            ) : null}
         </div>
     )
 }

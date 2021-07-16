@@ -3,14 +3,12 @@ import { startGame } from '../../game'
 import { store } from '../store'
 import style from './stage.module.css'
 
-function Stage(props) {
+function Stage() {
     const ref = useRef(null)
 
     useEffect(() => {
-        if (props.render) {
-            startGame(ref.current, store.up, store.cityData)
-        }
-    }, [props])
+        startGame(ref.current, store.up, store.cityData)
+    }, [])
 
     return <div ref={ref} className={`${style.stage}`}></div>
 }

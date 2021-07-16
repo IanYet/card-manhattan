@@ -1,4 +1,6 @@
 import TWEEN, { Tween } from '@tweenjs/tween.js'
+import { Board } from './Board'
+import { checkBuildable } from './calc'
 import { addFloor, generateFloor, removeFloor } from './draw'
 import { constant, status } from './status'
 import { utils } from './utils'
@@ -17,6 +19,7 @@ const operate = {
     raycaster: null,
     intersectObject: null,
     tempFloor: null,
+    pointerDownTime: 0,
 
     choose(objs, type) {
         const subMesh = operate.raycaster.intersectObjects(objs, true)[0]
@@ -72,9 +75,30 @@ const operate = {
             const building = area.children.find(
                 (b) => b.userData.id === `${area.userData.id}-${x}-${y}`
             )
-            addFloor(building, operate.tempFloor)
+            if (
+                checkBuildable(
+                    building.userData.data,
+                    operate.tempFloor.userData.data
+                )
+            )
+                addFloor(building, operate.tempFloor)
         }
         operate.intersectObject = area
+    },
+
+    handlePointerUp(ev) {
+        const time = ev.timeStamp - operate.pointerDownTime
+        if (time >= 120) return
+
+        if (ev.button === 0) {
+            if (status.mode === constant.VIEW_MODE) return
+            Board.changeMode(constant.VIEW_MODE)
+        } else if (ev.button === 2) {
+            Board.changeMode(constant.OPER_MODE)
+        }
+    },
+    handlePointerDown(ev) {
+        operate.pointerDownTime = ev.timeStamp
     },
 
     createTempFloor() {
@@ -90,6 +114,10 @@ const operate = {
         this.tempFloor = floor
     },
 
+    disposeTempFloor() {
+        if (operate.tempFloor) utils.disposeAll(operate.tempFloor)
+    },
+
     /**
      *
      * @param {HTMLElement} el
@@ -99,9 +127,13 @@ const operate = {
         operate.raycaster = raycaster
         el.addEventListener('pointermove', operate.handleViewModeMove)
         el.addEventListener('pointermove', operate.handleOperModeMove)
-        el.onclick = (ev) => {
-            // console.log(status.cityData)
-        }
+        el.addEventListener('pointerdown', this.handlePointerDown)
+        el.addEventListener('pointerup', this.handlePointerUp)
+    },
+
+    reset() {
+        operate.pointerDownTime = 0
+        operate.intersectObject = null
     },
 }
 

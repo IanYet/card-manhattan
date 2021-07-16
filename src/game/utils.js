@@ -1,5 +1,8 @@
 const utils = {
     disposeAll(obj) {
+        // console.log(obj)
+        if (!obj) return
+
         while (obj.children.length > 0) {
             utils.disposeAll(obj.children[0])
             obj.remove(obj.children[0])
