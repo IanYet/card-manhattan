@@ -36,6 +36,12 @@
             [[], [], ["1green", "1red", "1green"]]
         ]
     },
-    "cardData": [],
-    "chessData": []
+    "cardData": [
+        [0, 0],
+        [1, 2],
+        [1, 1],
+        [2, 1]
+    ],
+    "chessData": [1, 1, 2, 2],
+    "color": "color"
 }

@@ -1,5 +1,7 @@
 const store = {
     up: 0,
+    id: '',
+    color: '',
     cityData: {},
     cardData: {},
     chessData: {},
