@@ -234,10 +234,8 @@ class Board {
         // )
     }
 
-    async drawBoard() {
-        await status.getUp()
-        await status.getCity()
-        drawCity(this.scene)
+    drawBoard(up, cityData) {
+        drawCity(this.scene, up, cityData)
     }
 
     resetViewState() {
@@ -250,15 +248,14 @@ class Board {
      *
      * @param {string} mode constant.VIEW_MODE | constant.VIEW_MODE
      */
-    changeMode(mode) {
+    static changeMode(mode) {
         this.mode = mode
         status.mode = this.mode
 
+        operate.reset()
+
         if (mode === constant.OPER_MODE) {
-            operate.createTempFloor()
-        } else {
-            status.playedCard = []
-            status.playedChess = ''
+            if (!operate.tempFloor) operate.createTempFloor()
         }
     }
 }

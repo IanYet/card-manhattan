@@ -20,10 +20,7 @@ import { constant, status } from './status'
  *
  * @param {Scene} scene
  */
-const drawCity = (scene) => {
-    const cityData = status.cityData
-    const up = status.up
-
+const drawCity = (scene, up, cityData) => {
     const cityGroup = new Group()
     cityGroup.userData.type = constant.CITY_GROUP
     scene.add(cityGroup)
@@ -55,8 +52,6 @@ const drawCity = (scene) => {
         for (let x = 0; x < 3; x++) {
             for (let y = 0; y < 3; y++) {
                 const buildingData = [...area[x][y]]
-                //第一次清空原json
-                area[x][y].length = 0
 
                 const buildingGroup = new Group()
                 buildingGroup.userData.id = `${id}-${x}-${y}`
@@ -135,9 +130,6 @@ const drawBuilding = (buildingGroup, buildingData) => {
             (pre, cur) => pre + parseInt(cur),
             0
         ) * 500
-    const [areaKey, x, y] = buildingGroup.userData.id.split('-')
-    //keep json data same
-    status.cityData[areaKey][x][y].push(floorData)
 
     buildingGroup.userData.data.push(floorData)
 
