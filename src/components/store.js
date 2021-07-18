@@ -3,8 +3,8 @@ const store = {
     id: '',
     color: '',
     cityData: {},
-    cardData: {},
-    chessData: {},
+    cardData: [],
+    chessData: [],
     userList: [],
 
     usedCardData: {},

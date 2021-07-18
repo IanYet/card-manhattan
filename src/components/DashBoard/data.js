@@ -5,7 +5,7 @@ const _cardData = atom({
     key: '_card-data',
     default: [...store.cardData],
 })
-const cardData = selector({
+const cardDataSelector = selector({
     key: 'card-data',
     get: ({ get }) => get(_cardData),
     set: ({ set }, newValue = [...store.cardData]) => {
@@ -14,4 +14,4 @@ const cardData = selector({
     },
 })
 
-export { cardData }
+export { cardDataSelector }

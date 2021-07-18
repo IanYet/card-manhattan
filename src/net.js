@@ -11,6 +11,7 @@ const net = {
     setId: (id) => (net.id = id),
     getInitData: async () =>
         axios.get(`${net.url}data.json?key=${net.key}`).then((data) => {
+            console.log(data.data)
             store.cityData = data.data.cityData
             store.cardData = data.data.cardData
             store.chessData = data.data.chessData
