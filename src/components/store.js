@@ -6,10 +6,14 @@ const store = {
     cardData: [],
     chessData: [],
     userList: [],
-
-    usedCardData: {},
-    usedChessData: {},
-    leftChessData: {},
+    
+    leftChessData: {
+        1: 11,
+        2: 6,
+        3: 4,
+        4: 3,
+    },
+    playedData: {},
 }
 
 export { store }

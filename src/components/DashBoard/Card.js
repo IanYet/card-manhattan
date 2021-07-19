@@ -1,6 +1,32 @@
 import { useEffect, useRef } from 'react'
 import style from './dashBoard.module.css'
 
+function drawRoundRect(ctx, x, y, width, height, radius, isFill) {
+    ctx.beginPath()
+    ctx.moveTo(x, y + radius)
+    ctx.lineTo(x, y + height - radius)
+    ctx.arc(x + radius, y - radius + height, radius, Math.PI, Math.PI / 2, true)
+    ctx.lineTo(x + width - radius, y + height)
+    ctx.arc(
+        x - radius + width,
+        y - radius + height,
+        radius,
+        Math.PI / 2,
+        0,
+        true
+    )
+    ctx.lineTo(x + width, y + radius)
+    ctx.arc(x - radius + width, y + radius, radius, 0, -Math.PI / 2, true)
+    ctx.lineTo(x + radius, y)
+    ctx.arc(x + radius, y + radius, radius, -Math.PI / 2, -Math.PI, true)
+    ctx.stroke()
+
+    if (isFill) {
+        ctx.fillStyle = 'rgba(255,255,255,0.75)'
+        ctx.fill()
+    }
+}
+
 function Card({
     idx,
     color,
@@ -26,7 +52,26 @@ function Card({
         gra.addColorStop(1, colorMap.current[color][1])
         ctx.fillStyle = gra
         ctx.fillRect(0, 0, 192, 192)
-    }, [color])
+
+        ctx.lineWidth = 4
+        ctx.strokeStyle = 'rgba(255,255,255,0.75)'
+
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                let isFill = false
+                if (data[0] === i && data[1] === j) isFill = true
+                drawRoundRect(
+                    ctx,
+                    44 * j + 15 * (j + 1),
+                    44 * i + 15 * (i + 1),
+                    44,
+                    44,
+                    8,
+                    isFill
+                )
+            }
+        }
+    }, [color, data])
     return (
         <canvas
             className={`${style.card} ${

@@ -20,6 +20,9 @@
 }
 
 .chessArea {
+    box-sizing: border-box;
+    height: calc(200px + 2rem);
+    padding: 1rem;
 }
 
 .roundChessArea {
@@ -41,10 +44,10 @@
 
 .card.hoveredNext,
 .card.selectedNext {
-    transform: translateX(40px);
+    transform: translateX(45px);
 }
 
 .card.hovered,
 .card.selected {
-    transform: translateX(-40px);
+    transform: translateX(-45px);
 }

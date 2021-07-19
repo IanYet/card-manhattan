@@ -5,7 +5,6 @@ import {
     DoubleSide,
     MeshBasicMaterial,
     MeshLambertMaterial,
-    MeshStandardMaterial,
     TextureLoader,
 } from 'three'
 
@@ -20,36 +19,36 @@ const girdMatrial0 = new MeshLambertMaterial({
 })
 
 const chessMatrialMap = {
-    red: new MeshStandardMaterial({ color: 0xf5e1da }),
-    yellow: new MeshStandardMaterial({ color: 0xffe194 }),
-    green: new MeshStandardMaterial({ color: 0xc9e4c5 }),
-    blue: new MeshStandardMaterial({ color: 0xd0e8f2 }),
+    red: new MeshLambertMaterial({ color: 0xf5e1da }),
+    yellow: new MeshLambertMaterial({ color: 0xffe194 }),
+    green: new MeshLambertMaterial({ color: 0xc9e4c5 }),
+    blue: new MeshLambertMaterial({ color: 0xd0e8f2 }),
 }
 
 const tempChessMaterialMap = {
-    red: new MeshStandardMaterial({
+    red: new MeshLambertMaterial({
         color: 0xf5e1da,
         transparent: true,
         opacity: 0.5,
     }),
-    yellow: new MeshStandardMaterial({
+    yellow: new MeshLambertMaterial({
         color: 0xffe194,
         transparent: true,
         opacity: 0.5,
     }),
-    green: new MeshStandardMaterial({
+    green: new MeshLambertMaterial({
         color: 0xc9e4c5,
         transparent: true,
         opacity: 0.5,
     }),
-    blue: new MeshStandardMaterial({
+    blue: new MeshLambertMaterial({
         color: 0xd0e8f2,
         transparent: true,
         opacity: 0.5,
     }),
 }
 
-const windowMaterial = new MeshStandardMaterial({
+const windowMaterial = new MeshLambertMaterial({
     color: 0xffffff,
     opacity: 0.8,
     transparent: true,
