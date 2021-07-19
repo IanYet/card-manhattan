@@ -42,6 +42,6 @@
         [1, 1],
         [2, 1]
     ],
-    "chessData": [1, 1, 2, 2],
-    "color": "color"
+    "chessData": [1, 1, 2, 2, 3, 4],
+    "color": "yellow"
 }

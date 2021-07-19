@@ -1,36 +1,41 @@
-import { useEffect, useState } from 'react'
-import { RecoilRoot } from 'recoil'
+import { useEffect } from 'react'
+import { atom, useRecoilState } from 'recoil'
 import './App.css'
 import { Chatroom } from './components/Chatroom'
 import { DashBoard } from './components/DashBoard'
 import { InfoPanel } from './components/InfoPanel'
 import { Stage } from './components/Stage'
-import { store } from './components/store'
 import { net } from './net'
 
+const readyAtom = atom({
+    default: false,
+    key: 'ready-atom',
+})
+
 function App() {
-    const [isRender, startRender] = useState(false)
+    const [isReady, readyGo] = useRecoilState(readyAtom)
+
     useEffect(() => {
         net.setUrl('./')
         net.setKey('123')
         net.getInitData().then(() => {
-            console.log(store)
-            startRender(true)
+            readyGo(true)
         })
-    }, [])
+    }, [readyGo])
 
     return (
         <div className='App'>
-            {isRender ? (
-                <RecoilRoot>
+            {isReady ? (
+                <>
                     <Chatroom />
                     <DashBoard />
                     <InfoPanel />
                     <Stage />
-                </RecoilRoot>
+                </>
             ) : null}
         </div>
     )
 }
 
+export { readyAtom }
 export default App
