@@ -22,7 +22,7 @@ function drawRoundRect(ctx, x, y, width, height, radius, isFill) {
     ctx.stroke()
 
     if (isFill) {
-        ctx.fillStyle = 'rgba(255,255,255,0.75)'
+        ctx.fillStyle = 'rgba(255,255,255,1)'
         ctx.fill()
     }
 }
@@ -38,10 +38,10 @@ function Card({
 }) {
     const ref = useRef(null)
     const colorMap = useRef({
-        green: ['#aac9ce', '#f3dbcd', '#e5c1cd'],
-        blue: ['#c9bbcb', '#aac9ce', '#f3dbcf'],
-        red: ['#e5c1cd', '#f3dbcf', '#c9bbcb'],
-        yellow: ['#f3dbcf', '#c9bbcb', '#aac9ce'],
+        green: ['#aac9ce', '#f3dbcd', '#c9e4c5'],
+        blue: ['#c9bbcb', '#aac9ce', '#d0e8f2'],
+        red: ['#e5c1cd', '#f3dbcf', '#f5e1da'],
+        yellow: ['#f3dbcf', '#c9bbcb', '#ffe194'],
     })
 
     useEffect(() => {
@@ -54,7 +54,7 @@ function Card({
         ctx.fillRect(0, 0, 192, 192)
 
         ctx.lineWidth = 4
-        ctx.strokeStyle = 'rgba(255,255,255,0.75)'
+        ctx.strokeStyle = 'rgba(255,255,255,1)'
 
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
@@ -86,7 +86,7 @@ function Card({
                 borderColor:
                     idx === selectedCard
                         ? colorMap.current[color][2]
-                        : 'rgba(255,255,255,0.8)',
+                        : 'rgba(255,255,255,1)',
             }}
             onClick={(ev) =>
                 idx === selectedCard
