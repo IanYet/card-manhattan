@@ -141,7 +141,12 @@ function DashBoard() {
     return (
         <>
             <div className={`${style.btnBars}`}>
-                <div className={`${style.msg}`}>{tempMsg || stepMsg[step]}</div>
+                <div className={`${style.msg}`}>
+                    <div>{tempMsg || stepMsg[step]}</div>
+                    <div className={`${style.backView} ${style[store.color]}`}>
+                        &#xe900;
+                    </div>
+                </div>
                 <div className={`${style.btnArea}`}>{submitBtn[step]}</div>
             </div>
             <div className={`${style.dash}`}>

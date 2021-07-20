@@ -31,6 +31,7 @@
 }
 
 .red .symbol {
+    color: #f5e1da;
     border: 2px solid #f5e1da;
 }
 .red .symbol:hover,
@@ -41,6 +42,7 @@
 }
 
 .yellow .symbol {
+    color: #ffe194;
     border: 2px solid #ffe194;
 }
 .yellow .symbol:hover,
@@ -51,6 +53,7 @@
 }
 
 .green .symbol {
+    color: #c9e4c5;
     border: 2px solid #c9e4c5;
 }
 .green .symbol:hover,
@@ -61,6 +64,7 @@
 }
 
 .blue .symbol {
+    color: #d0e8f2;
     border: 2px solid #d0e8f2;
 }
 .blue .symbol:hover,

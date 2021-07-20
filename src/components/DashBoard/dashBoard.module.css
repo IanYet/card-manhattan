@@ -143,7 +143,10 @@
     box-shadow: var(--shadow);
     line-height: 3rem;
 
-    padding-left: 1rem;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .btnArea {
@@ -201,6 +204,46 @@
 .submit.green:hover,
 .submit.green.pressed {
     border-color: white;
+    background-color: #c9e4c5;
+    color: white;
+}
+
+.backView {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    font-size: 1.2rem;
+    justify-content: center;
+    align-items: center;
+    transition: all 300ms ease-out;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.backView.red {
+    color: #f5e1da;
+}
+.backView.red:hover {
+    background-color: #f5e1da;
+    color: white;
+}
+.backView.yellow {
+    color: #ffe194;
+}
+.backView.yellow:hover {
+    background-color: #ffe194;
+    color: white;
+}
+.backView.blue {
+    color: #d0e8f2;
+}
+.backView.blue:hover {
+    background-color: #d0e8f2;
+    color: white;
+}
+.backView.green {
+    color: #c9e4c5;
+}
+.backView.green:hover {
     background-color: #c9e4c5;
     color: white;
 }

@@ -21,7 +21,7 @@ function Chatroom() {
             <div
                 className={`${style.symbol} ${isSpread ? style.spread : ''}`}
                 onClick={(ev) => toggleSpread(!isSpread)}>
-                &#xe900;
+                &#xe901;
             </div>
             <div>
                 <div className={`${style.popList}`} ref={listRef}>
