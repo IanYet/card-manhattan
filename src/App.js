@@ -12,6 +12,17 @@ const readyAtom = atom({
     key: 'ready-atom',
 })
 
+const STEP = {
+    pre_round: 'pre_round',
+    your_turn: 'your_ turn',
+    other_turn: 'other_turn',
+}
+
+const stepAtom = atom({
+    key: 'step-atom',
+    default: STEP.pre_round,
+})
+
 function App() {
     const [isReady, readyGo] = useRecoilState(readyAtom)
 
@@ -37,5 +48,5 @@ function App() {
     )
 }
 
-export { readyAtom }
+export { readyAtom, stepAtom, STEP }
 export default App

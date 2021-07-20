@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { constant } from '../../game'
 import style from './dashBoard.module.css'
 
 function drawRoundRect(ctx, x, y, width, height, radius, isFill) {
@@ -38,10 +39,10 @@ function Card({
 }) {
     const ref = useRef(null)
     const colorMap = useRef({
-        green: ['#aac9ce', '#f3dbcd', '#c9e4c5'],
-        blue: ['#c9bbcb', '#aac9ce', '#d0e8f2'],
-        red: ['#e5c1cd', '#f3dbcf', '#f5e1da'],
-        yellow: ['#f3dbcf', '#c9bbcb', '#ffe194'],
+        green: ['#aac9ce', '#f3dbcd', constant.COLOR_MAP.green],
+        blue: ['#c9bbcb', '#aac9ce', constant.COLOR_MAP.blue],
+        red: ['#e5c1cd', '#f3dbcf', constant.COLOR_MAP.red],
+        yellow: ['#f3dbcf', '#c9bbcb', constant.COLOR_MAP.yellow],
     })
 
     useEffect(() => {

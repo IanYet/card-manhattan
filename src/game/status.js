@@ -11,6 +11,13 @@ const constant = {
     BUILDING_GROUP: 'building',
     GRID_GROUP: 'grid',
     FLOOR_GROUP: 'floor',
+
+    COLOR_MAP: {
+        red: '#f5e1da',
+        yellow: '#ffe194',
+        green: '#c9e4c5',
+        blue: '#d0e8f2'
+    }
 }
 
 const status = {

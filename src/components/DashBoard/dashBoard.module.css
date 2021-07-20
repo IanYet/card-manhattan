@@ -15,7 +15,7 @@
 
 .cardArea {
     box-sizing: border-box;
-    width: calc(500px + 2rem);
+    width: calc(600px + 2rem);
     height: calc(200px + 2rem);
 }
 
@@ -23,12 +23,67 @@
     box-sizing: border-box;
     height: calc(200px + 2rem);
     padding: 1rem;
+    margin-left: 2rem;
 }
 
 .roundChessArea {
+    box-sizing: border-box;
+    padding: 0 1rem;
+    width: 16rem;
+    height: 3rem;
+    background-color: white;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
+}
+
+.chess {
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 6px;
+    transition: all 300ms ease-out;
+    cursor: pointer;
+}
+
+.chessHolder {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 0.3rem;
+    background-color: #aaaaaa;
 }
 
 .leftChessArea {
+    width: 16rem;
+    margin-top: 1rem;
+    height: calc(200px - 4rem);
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
+    overflow-y: auto;
+    box-sizing: border-box;
+
+    padding: 1rem;
+}
+
+.leftChessArea::-webkit-scrollbar {
+    display: none;
+}
+
+.rowChessArea {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
 }
 
 .card {
@@ -50,4 +105,28 @@
 .card.hovered,
 .card.selected {
     transform: translateX(-45px);
+}
+
+.red:hover,
+.red.selected {
+    background-color: #f5e1da;
+}
+.green:hover,
+.green.selected {
+    background-color: #c9e4c5;
+}
+.blue:hover,
+.blue.selected {
+    background-color: #d0e8f2;
+}
+.yellow:hover,
+.yellow.selected {
+    background-color: #ffe194;
+}
+
+.btnBars {
+    position: fixed;
+    bottom: calc(200px + 2rem);
+    left: 50vw;
+    transform: translateX(-50%);
 }

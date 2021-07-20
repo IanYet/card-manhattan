@@ -7,6 +7,7 @@ import {
     MeshLambertMaterial,
     TextureLoader,
 } from 'three'
+import { constant } from './status'
 
 const girdMatrial = new MeshLambertMaterial({
     color: new Color('rgb(255,255,255)'),
@@ -19,30 +20,30 @@ const girdMatrial0 = new MeshLambertMaterial({
 })
 
 const chessMatrialMap = {
-    red: new MeshLambertMaterial({ color: 0xf5e1da }),
-    yellow: new MeshLambertMaterial({ color: 0xffe194 }),
-    green: new MeshLambertMaterial({ color: 0xc9e4c5 }),
-    blue: new MeshLambertMaterial({ color: 0xd0e8f2 }),
+    red: new MeshLambertMaterial({ color: constant.COLOR_MAP.red }),
+    yellow: new MeshLambertMaterial({ color: constant.COLOR_MAP.yellow }),
+    green: new MeshLambertMaterial({ color: constant.COLOR_MAP.green }),
+    blue: new MeshLambertMaterial({ color: constant.COLOR_MAP.blue }),
 }
 
 const tempChessMaterialMap = {
     red: new MeshLambertMaterial({
-        color: 0xf5e1da,
+        color: constant.COLOR_MAP.red,
         transparent: true,
         opacity: 0.5,
     }),
     yellow: new MeshLambertMaterial({
-        color: 0xffe194,
+        color: constant.COLOR_MAP.yellow,
         transparent: true,
         opacity: 0.5,
     }),
     green: new MeshLambertMaterial({
-        color: 0xc9e4c5,
+        color: constant.COLOR_MAP.green,
         transparent: true,
         opacity: 0.5,
     }),
     blue: new MeshLambertMaterial({
-        color: 0xd0e8f2,
+        color: constant.COLOR_MAP.blue,
         transparent: true,
         opacity: 0.5,
     }),
