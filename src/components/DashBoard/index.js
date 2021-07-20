@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { readyAtom } from '../../App'
+import { readyAtom, STEP, stepAtom } from '../../App'
 import { net } from '../../net'
 import { store } from '../store'
 import { Card } from './Card'
@@ -9,6 +9,7 @@ import {
     cardDataSelector,
     leftChessDataAtom,
     roundChessDataSelector,
+    tempMsgAtom,
 } from './data'
 
 function DashBoard() {
@@ -21,11 +22,14 @@ function DashBoard() {
     const [hoveredCard, setHoveredCard] = useState(-2)
     const [selectedChess, setSelectedChess] = useState(-2)
     const [tempRoundChess, setTempRoundChess] = useState([])
+    const [submitPressed, pressSubmit] = useState(false)
+    const tempMsg = useRecoilValue(tempMsgAtom)
     const isReady = useRecoilValue(readyAtom)
+    const step = useRecoilValue(stepAtom)
 
-    useEffect(() => {
-        console.log(roundChessData, leftChessData)
-    }, [roundChessData, leftChessData])
+    // useEffect(() => {
+    //     console.log(roundChessData, leftChessData)
+    // }, [roundChessData, leftChessData])
 
     useEffect(() => {
         if (isReady) {
@@ -33,6 +37,42 @@ function DashBoard() {
             setRoundChessData([...store.chessData])
         }
     }, [isReady, setCardData, setRoundChessData])
+
+    const stepMsg = {
+        [STEP.pre_round]: '请选择本阶段游戏你所选用的棋子',
+        [STEP.your_turn]: '你的回合，请摆放建筑',
+        [STEP.other_turn]: '现在是其他人的回合',
+        [STEP.round_end]: '本阶段结束，你的分数是：',
+    }
+
+    const submitBtn = {
+        [STEP.pre_round]: (
+            <div
+                className={`${style.submit} ${style[store.color]} ${
+                    submitPressed ? style.pressed : ''
+                }`}
+                onClick={(ev) => {
+                    if (submitPressed) return
+                    pressSubmit(true)
+                }}>
+                结束准备
+            </div>
+        ),
+        [STEP.your_turn]: (
+            <div
+                className={`${style.submit} ${style[store.color]} ${
+                    submitPressed ? style.pressed : ''
+                }`}
+                onClick={(ev) => {
+                    if (submitPressed) return
+                    pressSubmit(true)
+                }}>
+                结束回合
+            </div>
+        ),
+        [STEP.other_turn]: '',
+        [STEP.round_end]: '',
+    }
 
     const roundChessArea = [0, 1, 2, 3, 4, 5].map((idx) => (
         <div
@@ -101,9 +141,8 @@ function DashBoard() {
     return (
         <>
             <div className={`${style.btnBars}`}>
-                <div></div>
-                <div></div>
-                <div></div>
+                <div className={`${style.msg}`}>{tempMsg || stepMsg[step]}</div>
+                <div className={`${style.btnArea}`}>{submitBtn[step]}</div>
             </div>
             <div className={`${style.dash}`}>
                 <div className={`${style.cardArea}`}>

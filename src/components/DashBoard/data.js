@@ -47,9 +47,15 @@ const leftChessDataAtom = atom({
     key: '_left-chess-data',
 })
 
+const tempMsgAtom = atom({
+    default: '',
+    key: 'temp-msg-atom',
+})
+
 export {
     cardDataSelector,
     roundChessDataSelector,
     leftChessDataAtom,
     isRoundStartAtom,
+    tempMsgAtom,
 }
