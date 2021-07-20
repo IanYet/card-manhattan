@@ -1,14 +1,142 @@
 .chatroom {
     position: fixed;
     z-index: 10;
-    background-color: white;
+    /* background-color: white; */
 
-    top: 2rem;
+    bottom: 30vh;
     left: 0;
 
-    width: 12rem;
-    min-height: 40rem;
-
     box-sizing: border-box;
-    border-radius: 0 6px 6px 0;
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.symbol {
+    height: calc(3rem - 4px);
+    width: calc(3rem - 4px);
+    margin-right: 1rem;
+    border-radius: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    font-size: 1.2rem;
+    box-sizing: border-box;
+    box-shadow: var(--shadow);
+    transition: all 300ms ease-out;
+    cursor: pointer;
+}
+
+.red .symbol {
+    border: 2px solid #f5e1da;
+}
+.red .symbol:hover,
+.red .symbol.spread {
+    background-color: #f5e1da;
+    color: white;
+    border-color: white;
+}
+
+.yellow .symbol {
+    border: 2px solid #ffe194;
+}
+.yellow .symbol:hover,
+.yellow .symbol.spread {
+    background-color: #ffe194;
+    color: white;
+    border-color: white;
+}
+
+.green .symbol {
+    border: 2px solid #c9e4c5;
+}
+.green .symbol:hover,
+.green .symbol.spread {
+    background-color: #c9e4c5;
+    color: white;
+    border-color: white;
+}
+
+.blue .symbol {
+    border: 2px solid #d0e8f2;
+}
+.blue .symbol:hover,
+.blue .symbol.spread {
+    background-color: #d0e8f2;
+    color: white;
+    border-color: white;
+}
+
+.input {
+    height: 2rem;
+    width: 13rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    box-sizing: border-box;
+    padding-left: 0.8rem;
+    line-height: 2rem;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 1rem;
+    border: none;
+    overflow-x: auto;
+    transition: all 300ms ease-out;
+}
+.input::-webkit-scrollbar {
+    display: none;
+}
+.input:focus {
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: var(--shadow);
+}
+
+.popList {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    max-height: 40vh;
+    overflow-y: auto;
+}
+.popList::-webkit-scrollbar {
+    display: none;
+}
+.pop {
+    max-width: 10rem;
+    width: fit-content;
+    box-sizing: border-box;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.9rem;
+    border-radius: 1rem;
+    line-height: 1.4rem;
+    margin-bottom: 0.5rem;
+    transition: all 300ms ease-out;
+}
+.pop.self {
+    align-self: flex-end;
+}
+
+.pop.red {
+    background-color: #f5e1da;
+}
+.pop.blue {
+    background-color: #d0e8f2;
+}
+.pop.green {
+    background-color: #c9e4c5;
+}
+.pop.yellow {
+    background-color: #ffe194;
+}
+
+.pop.collapse,
+.input.collapse {
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
 }
