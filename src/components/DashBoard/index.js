@@ -17,15 +17,17 @@ function DashBoard() {
     const [roundChessData, setRoundChessData] = useRecoilState(
         roundChessDataSelector
     )
-    const leftChessData = useRecoilValue(leftChessDataAtom)
+    const [leftChessData, setLeftChess] = useRecoilState(leftChessDataAtom)
     const [selectedCard, setSelectedCard] = useState(-2)
     const [hoveredCard, setHoveredCard] = useState(-2)
     const [selectedChess, setSelectedChess] = useState(-2)
     const [tempRoundChess, setTempRoundChess] = useState([])
     const [submitPressed, pressSubmit] = useState(false)
-    const tempMsg = useRecoilValue(tempMsgAtom)
+    const [tempMsg, setTempMsg] = useRecoilState(tempMsgAtom)
     const isReady = useRecoilValue(readyAtom)
     const step = useRecoilValue(stepAtom)
+
+    const userNum = Object.keys(store.userList).length === 3 ? 4 : 6
 
     // useEffect(() => {
     //     console.log(roundChessData, leftChessData)
@@ -45,16 +47,41 @@ function DashBoard() {
         [STEP.round_end]: '本阶段结束，你的分数是：',
     }
 
+    const endReadyStep = () => {
+        if (submitPressed) return
+        if (tempRoundChess.length < userNum) {
+            setTempMsg('请选择' + userNum + '个棋子')
+            setTimeout(() => setTempMsg(''), 5000)
+            return
+        }
+
+        pressSubmit(true)
+
+        net.postRoundChess().finally(() => {
+            const chessList = tempRoundChess
+                .map((chess) => parseInt(chess))
+                .sort()
+            setRoundChessData(chessList)
+
+            const chessMap = { 1: 0, 2: 0, 3: 0, 4: 0 }
+            chessList.forEach((val) => (chessMap[val] += 1))
+            for (let i = 1; i < 5; i++) {
+                store.leftChessData[i] = store.leftChessData[i] - chessMap[i]
+            }
+            setLeftChess(store.leftChessData)
+            setTempRoundChess([])
+            setTempMsg('正在等待其他玩家')
+            console.log(store)
+        })
+    }
+
     const submitBtn = {
         [STEP.pre_round]: (
             <div
                 className={`${style.submit} ${style[store.color]} ${
                     submitPressed ? style.pressed : ''
                 }`}
-                onClick={(ev) => {
-                    if (submitPressed) return
-                    pressSubmit(true)
-                }}>
+                onClick={endReadyStep}>
                 结束准备
             </div>
         ),
@@ -81,6 +108,7 @@ function DashBoard() {
                 idx === selectedChess ? style.selected : ''
             }`}
             onClick={(ev) => {
+                if (step !== STEP.your_turn) return
                 if (roundChessData[idx]) setSelectedChess(idx)
                 else setSelectedChess(-2)
             }}>
@@ -105,6 +133,7 @@ function DashBoard() {
                 }`}
                 key={idx}
                 onClick={(ev) => {
+                    if (step !== STEP.pre_round) return
                     if (tempRoundChess.includes(`${level}-${idx}`)) {
                         setTempRoundChess(
                             tempRoundChess.filter(
@@ -112,7 +141,7 @@ function DashBoard() {
                             )
                         )
                     } else {
-                        if (tempRoundChess.length >= 6) return
+                        if (tempRoundChess.length >= userNum) return
                         setTempRoundChess([
                             ...tempRoundChess,
                             `${level}-${idx}`,
@@ -124,19 +153,22 @@ function DashBoard() {
                     marginBottom: '.4rem',
                 }}>
                 <img
-                    src={`${net.url}floor${roundChessData[level]}.svg`}
-                    alt={`floor${roundChessData[level]}`}
+                    src={`${net.url}floor${level}.svg`}
+                    alt={`floor${level}`}
                 />
             </div>
         ))
 
     const leftChessArea = Object.keys(leftChessData)
         .sort()
-        .map((level) => (
-            <div key={level} className={`${style.rowChessArea}`}>
-                {rowChessArea(level)}
-            </div>
-        ))
+        .map((level) => {
+            // console.log(level)
+            return (
+                <div key={level} className={`${style.rowChessArea}`}>
+                    {rowChessArea(level)}
+                </div>
+            )
+        })
 
     return (
         <>

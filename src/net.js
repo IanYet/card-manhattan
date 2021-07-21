@@ -17,7 +17,14 @@ const net = {
             store.chessData = data.data.chessData
             store.up = data.data.up
             store.color = data.data.color
+            store.userId = data.data.userId
+            net.setId(store.userId)
+            store.leftChessData = data.data.leftChessData
+            store.playedData = data.data.playedData
         }),
+    getStep: async () => axios.get(`${net.url}step.json?key=${net.key}`),
+    postRoundChess: async () =>
+        axios.get(`${net.url}mock.json?key=${net.key}&id=${net.id}`),
 }
 
 export { net }

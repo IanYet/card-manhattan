@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react'
+import { useRecoilValue } from 'recoil'
+import { STEP, stepAtom } from '../../App'
 import { constant } from '../../game'
 import style from './dashBoard.module.css'
 
@@ -38,6 +40,7 @@ function Card({
     setHoveredCard,
 }) {
     const ref = useRef(null)
+    const step = useRecoilValue(stepAtom)
     const colorMap = useRef({
         green: ['#aac9ce', '#f3dbcd', constant.COLOR_MAP.green],
         blue: ['#c9bbcb', '#aac9ce', constant.COLOR_MAP.blue],
@@ -89,11 +92,13 @@ function Card({
                         ? colorMap.current[color][2]
                         : 'rgba(255,255,255,1)',
             }}
-            onClick={(ev) =>
-                idx === selectedCard
-                    ? setSelectedCard(-2)
-                    : setSelectedCard(idx)
-            }
+            onClick={(ev) => {
+                if (step === STEP.your_turn) {
+                    idx === selectedCard
+                        ? setSelectedCard(-2)
+                        : setSelectedCard(idx)
+                }
+            }}
             onPointerEnter={(ev) => setHoveredCard(idx)}
             onPointerLeave={(ev) => setHoveredCard(-2)}
             ref={ref}></canvas>

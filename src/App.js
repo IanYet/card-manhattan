@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { atom, useRecoilState } from 'recoil'
+import { atom, useRecoilState, useSetRecoilState } from 'recoil'
 import './App.css'
 import { Chatroom } from './components/Chatroom'
 import { DashBoard } from './components/DashBoard'
@@ -27,14 +27,20 @@ const stepAtom = atom({
 
 function App() {
     const [isReady, readyGo] = useRecoilState(readyAtom)
+    const setStep = useSetRecoilState(stepAtom)
 
     useEffect(() => {
         net.setUrl('./')
         net.setKey('123')
-        net.getInitData().then(() => {
-            readyGo(true)
-        })
-    }, [readyGo])
+        net.getInitData()
+            .then(() => {
+                readyGo(true)
+                return net.getStep()
+            })
+            .then((data) => {
+                setStep(data.data.step)
+            })
+    }, [readyGo, setStep])
 
     return (
         <div className='App'>

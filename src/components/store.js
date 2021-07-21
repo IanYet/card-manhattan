@@ -1,11 +1,11 @@
 const store = {
     up: 0,
-    id: '',
+    userId: '',
     color: '',
     cityData: {},
     cardData: [],
     chessData: [],
-    userList: [],
+    userList: {},
     
     leftChessData: {
         1: 11,
