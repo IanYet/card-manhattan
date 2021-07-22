@@ -133,7 +133,7 @@ function DashBoard() {
                 }`}
                 key={idx}
                 onClick={(ev) => {
-                    if (step !== STEP.pre_round) return
+                    if (step !== STEP.pre_round || submitPressed) return
                     if (tempRoundChess.includes(`${level}-${idx}`)) {
                         setTempRoundChess(
                             tempRoundChess.filter(

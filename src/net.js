@@ -25,6 +25,8 @@ const net = {
     getStep: async () => axios.get(`${net.url}step.json?key=${net.key}`),
     postRoundChess: async () =>
         axios.get(`${net.url}mock.json?key=${net.key}&id=${net.id}`),
+    //mock websocket data
+     
 }
 
 export { net }
