@@ -13,11 +13,12 @@ const readyAtom = atom({
 })
 
 const STEP = {
+    waiting: 'waiting',
     pre_round: 'pre_round',
     your_turn: 'your_ turn',
     other_turn: 'other_turn',
     round_end: 'round_end',
-    game_end: 'game_end',
+    end: 'game_end',
 }
 
 const stepAtom = atom({
