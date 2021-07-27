@@ -1,3 +1,5 @@
+
+
 function ui() {
     title()
     btns()
@@ -48,6 +50,12 @@ function btns() {
     footer.append(knowLink)
 
     document.body.append(footer)
+}
+
+function board() {
+    const boardContainer = document.createElement('div')
+    const mask = document.createElement('div')
+    // const board = document
 }
 
 export { ui }
