@@ -1,9 +1,21 @@
+@font-face {
+    font-family: 'icomoon';
+    src: url('./src/fonts/icomoon.eot');
+    src: url('./src/fonts/icomoon.eot?6szc7m#iefix') format('embedded-opentype'),
+        url('./src/fonts/icomoon.ttf?6szc7m') format('truetype'),
+        url('./src/fonts/icomoon.woff?6szc7m') format('woff'),
+        url('./src/fonts/icomoon.svg?6szc7m#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
 body {
     margin: 0;
     width: 100vw;
     height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-        'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    font-family: 'icomoon', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
         'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
