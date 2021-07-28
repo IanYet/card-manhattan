@@ -6,7 +6,7 @@ const store = {
     cardData: [],
     chessData: [],
     userList: {},
-    
+
     leftChessData: {
         1: 11,
         2: 6,

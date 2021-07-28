@@ -57,6 +57,8 @@ function DashBoard() {
 
         pressSubmit(true)
 
+        
+
         net.postRoundChess().finally(() => {
             const chessList = tempRoundChess
                 .map((chess) => parseInt(chess))
@@ -114,7 +116,7 @@ function DashBoard() {
             }}>
             {roundChessData[idx] ? (
                 <img
-                    src={`${net.url}floor${roundChessData[idx]}.svg`}
+                    src={`./floor${roundChessData[idx]}.svg`}
                     alt={`floor${roundChessData[idx]}`}
                 />
             ) : (
@@ -153,7 +155,7 @@ function DashBoard() {
                     marginBottom: '.4rem',
                 }}>
                 <img
-                    src={`${net.url}floor${level}.svg`}
+                    src={`./floor${level}.svg`}
                     alt={`floor${level}`}
                 />
             </div>

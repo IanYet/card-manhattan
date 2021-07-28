@@ -31,15 +31,19 @@ function App() {
     const setStep = useSetRecoilState(stepAtom)
 
     useEffect(() => {
-        net.setUrl('./')
-        net.setKey('123')
+        const roomKey = window.location.pathname.split('/')[1]
+        const userId = window.location.search.split('=')[1]
+
+        net.setUrl('http://localhost:9000/')
+        net.setKey(roomKey)
+        net.setId(userId)
         net.getInitData()
             .then(() => {
                 readyGo(true)
-                return net.getStep()
+                net.setWs('ws://localhost:9000/')
             })
             .then((data) => {
-                setStep(data.data.step)
+                // setStep(data.data.step)
             })
     }, [readyGo, setStep])
 

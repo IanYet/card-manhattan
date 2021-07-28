@@ -1,4 +1,3 @@
-
 const constant = {
     VIEW_MODE: 0,
     OPER_MODE: 1,
@@ -16,8 +15,14 @@ const constant = {
         red: '#f5e1da',
         yellow: '#ffe194',
         green: '#c9e4c5',
-        blue: '#d0e8f2'
-    }
+        blue: '#d0e8f2',
+    },
+    WS_TYPE: {
+        setColor: 'setColor',
+        chat: 'chat',
+        step: 'step',
+        error: 'error',
+    },
 }
 
 const status = {

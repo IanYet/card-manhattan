@@ -1,16 +1,29 @@
 import { useState, useRef, useEffect } from 'react/cjs/react.development'
+import { constant } from '../../game'
+import { net } from '../../net'
 import { store } from '../store'
 import style from './chatroom.module.css'
 
 function Chatroom() {
     const [isSpread, toggleSpread] = useState(false)
     const [inputMsg, setInputMsg] = useState('')
-    const [msgList, setMsgList] = useState([
-        { color: 'blue', value: '我是bulu' },
-        { color: 'yellow', value: '我是yel' },
-        { color: 'green', value: '我是gewen' },
-    ])
+    const [msgList, setMsgList] = useState([])
     const listRef = useRef(null)
+
+    useEffect(() => {
+        const preOnMessage = net.ws.onmessage
+        net.ws.onmessage = (ev) => {
+            preOnMessage(ev)
+            const { type, payload } = JSON.parse(ev.data)
+            if (type === constant.WS_TYPE.chat) {
+                setMsgList((msgList) => [
+                    ...msgList,
+                    { color: payload.color, value: payload.message },
+                ])
+                setInputMsg('')
+            }
+        }
+    }, [])
 
     useEffect(() => {
         listRef.current.scrollTop = listRef.current.scrollHeight
@@ -42,11 +55,21 @@ function Chatroom() {
                     onChange={(ev) => setInputMsg(ev.target.value)}
                     onKeyDown={(ev) => {
                         if (ev.key === 'Enter') {
-                            setMsgList([
-                                ...msgList,
-                                { color: store.color, value: inputMsg },
-                            ])
-                            setInputMsg('')
+                            net.ws.send(
+                                JSON.stringify({
+                                    type: constant.WS_TYPE.chat,
+                                    roomKey: net.key,
+                                    payload: {
+                                        userId: store.userId,
+                                        message: inputMsg,
+                                    },
+                                })
+                            )
+                            // setMsgList([
+                            //     ...msgList,
+                            //     { color: store.color, value: inputMsg },
+                            // ])
+                            // setInputMsg('')
                         }
                     }}
                     value={inputMsg}
