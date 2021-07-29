@@ -69,7 +69,11 @@ function Chatroom() {
                             setInputMsg(ev.target.value)
                         }}
                         onKeyDown={(ev) => {
-                            if (ev.key === 'Enter') {
+                            if (
+                                ev.key === 'Enter' &&
+                                isChatChannel &&
+                                inputMsg !== ''
+                            ) {
                                 net.ws.send(
                                     JSON.stringify({
                                         type: constant.WS_TYPE.chat,

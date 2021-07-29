@@ -5,6 +5,7 @@ import { Chatroom } from './components/Chatroom'
 import { DashBoard } from './components/DashBoard'
 import { InfoPanel } from './components/InfoPanel'
 import { Stage } from './components/Stage'
+import { constant } from './game'
 import { net } from './net'
 
 const readyAtom = atom({
@@ -15,8 +16,10 @@ const readyAtom = atom({
 const STEP = {
     waiting: 'waiting',
     pre_round: 'pre_round',
-    your_turn: 'your_ turn',
-    other_turn: 'other_turn',
+    red_turn: 'red_turn',
+    yellow_turn: 'yellow_turn',
+    blue_turn: 'blue_turn',
+    green_turn: 'green_turn',
     round_end: 'round_end',
     end: 'game_end',
 }
@@ -43,6 +46,17 @@ function App() {
                 net.setWs('ws://localhost:9000/')
             })
             .then((data) => {
+                const ws = net.ws
+
+                const preOnmessage = ws.onmessage
+                ws.onmessage = (ev) => {
+                    preOnmessage(ev)
+                    const { type, payload } = ev.data
+
+                    if (type === constant.WS_TYPE.step) {
+                        setStep(payload.step)
+                    }
+                }
                 // setStep(data.data.step)
             })
     }, [readyGo, setStep])
