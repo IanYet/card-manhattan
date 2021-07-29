@@ -44,7 +44,7 @@ const drawCity = (scene, up, cityData) => {
         areaGroup.position.setZ(0)
 
         //up rotate
-        areaGroup.rotateZ((up / 360) * Math.PI * 2)
+        areaGroup.rotateZ((up / 4) * Math.PI * 2)
 
         cityGroup.add(areaGroup)
         status.areas.push(areaGroup)

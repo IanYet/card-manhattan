@@ -57,24 +57,37 @@ function DashBoard() {
 
         pressSubmit(true)
 
-        
+        const chessList = tempRoundChess.map((chess) => parseInt(chess)).sort()
+        const chessMap = { 1: 0, 2: 0, 3: 0, 4: 0 }
+        const leftChessData = { ...store.leftChessData }
 
-        net.postRoundChess().finally(() => {
-            const chessList = tempRoundChess
-                .map((chess) => parseInt(chess))
-                .sort()
-            setRoundChessData(chessList)
+        chessList.forEach((val) => (chessMap[val] += 1))
+        for (let i = 1; i < 5; i++) {
+            leftChessData[i] = leftChessData[i] - chessMap[i]
+        }
 
-            const chessMap = { 1: 0, 2: 0, 3: 0, 4: 0 }
-            chessList.forEach((val) => (chessMap[val] += 1))
-            for (let i = 1; i < 5; i++) {
-                store.leftChessData[i] = store.leftChessData[i] - chessMap[i]
-            }
-            setLeftChess(store.leftChessData)
-            setTempRoundChess([])
-            setTempMsg('正在等待其他玩家')
-            console.log(store)
-        })
+        const postData = {
+            userId: store.userId,
+            roundChess: chessList,
+            leftChess: leftChessData,
+        }
+
+        net.postRoundChess(postData)
+            .then(() => {
+                setRoundChessData(chessList)
+                store.leftChessData = { ...leftChessData }
+                setLeftChess(store.leftChessData)
+                setTempRoundChess([])
+                setTempMsg('正在等待其他玩家')
+                console.log(store)
+            })
+            .catch(() => {
+                setTempMsg('网络问题，请重试')
+                setTimeout(() => {
+                    setTempMsg('')
+                }, 3000)
+                pressSubmit(false)
+            })
     }
 
     const submitBtn = {
@@ -154,10 +167,7 @@ function DashBoard() {
                     marginLeft: idx % 6 === 0 ? '' : '.4rem',
                     marginBottom: '.4rem',
                 }}>
-                <img
-                    src={`./floor${level}.svg`}
-                    alt={`floor${level}`}
-                />
+                <img src={`./floor${level}.svg`} alt={`floor${level}`} />
             </div>
         ))
 

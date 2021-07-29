@@ -1,13 +1,20 @@
 import { useState, useRef, useEffect } from 'react/cjs/react.development'
+import { useRecoilState, atom } from 'recoil'
 import { constant } from '../../game'
 import { net } from '../../net'
 import { store } from '../store'
 import style from './chatroom.module.css'
 
+const msgListAtom = atom({
+    key: 'msgListStom',
+    default: [],
+})
+
 function Chatroom() {
     const [isSpread, toggleSpread] = useState(false)
     const [inputMsg, setInputMsg] = useState('')
-    const [msgList, setMsgList] = useState([])
+    const [msgList, setMsgList] = useRecoilState(msgListAtom)
+    const [isChatChannel, toggleChannel] = useState(true)
     const listRef = useRef(null)
 
     useEffect(() => {
@@ -23,7 +30,7 @@ function Chatroom() {
                 setInputMsg('')
             }
         }
-    }, [])
+    }, [setMsgList])
 
     useEffect(() => {
         listRef.current.scrollTop = listRef.current.scrollHeight
@@ -48,35 +55,43 @@ function Chatroom() {
                         </div>
                     ))}
                 </div>
-                <input
-                    className={`${style.input}  ${
+                <div
+                    className={`${style.inputContainer}   ${
                         isSpread ? '' : style.collapse
-                    }`}
-                    onChange={(ev) => setInputMsg(ev.target.value)}
-                    onKeyDown={(ev) => {
-                        if (ev.key === 'Enter') {
-                            net.ws.send(
-                                JSON.stringify({
-                                    type: constant.WS_TYPE.chat,
-                                    roomKey: net.key,
-                                    payload: {
-                                        userId: store.userId,
-                                        message: inputMsg,
-                                    },
-                                })
-                            )
-                            // setMsgList([
-                            //     ...msgList,
-                            //     { color: store.color, value: inputMsg },
-                            // ])
-                            // setInputMsg('')
-                        }
-                    }}
-                    value={inputMsg}
-                />
+                    }`}>
+                    <div className={`${style.channelTitle}`}>
+                        {isChatChannel ? '聊天' : '记录'}
+                    </div>
+                    <input
+                        className={`${style.input}`}
+                        onChange={(ev) => {
+                            if (!isChatChannel) return
+                            setInputMsg(ev.target.value)
+                        }}
+                        onKeyDown={(ev) => {
+                            if (ev.key === 'Enter') {
+                                net.ws.send(
+                                    JSON.stringify({
+                                        type: constant.WS_TYPE.chat,
+                                        roomKey: net.key,
+                                        payload: {
+                                            userId: store.userId,
+                                            message: inputMsg,
+                                        },
+                                    })
+                                )
+                            } else if (ev.key === 'Tab') {
+                                ev.preventDefault()
+                                toggleChannel(!isChatChannel)
+                            }
+                        }}
+                        value={inputMsg}
+                        placeholder={'按tab切换频道'}
+                    />
+                </div>
             </div>
         </div>
     )
 }
 
-export { Chatroom }
+export { Chatroom, msgListAtom }
