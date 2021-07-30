@@ -254,9 +254,9 @@ class Board {
 
         operate.reset()
 
-        if (mode === constant.OPER_MODE) {
-            if (!operate.tempFloor) operate.createTempFloor()
-        }
+        // if (mode === constant.OPER_MODE) {
+        //     if (!operate.tempFloor) operate.createTempFloor()
+        // }
     }
 }
 

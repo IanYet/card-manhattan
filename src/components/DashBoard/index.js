@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { readyAtom, STEP, stepAtom } from '../../App'
+import { readyAtom, stepAtom } from '../../App'
+import { operate, status } from '../../game'
 import { net } from '../../net'
-import { store } from '../store'
+import { STEP, store } from '../store'
 import { Card } from './Card'
 import style from './dashBoard.module.css'
 import {
@@ -40,12 +41,44 @@ function DashBoard() {
         }
     }, [isReady, setCardData, setRoundChessData])
 
-    const stepMsg = {
-        [STEP.pre_round]: '请选择本阶段游戏你所选用的棋子',
-        [STEP.your_turn]: '你的回合，请摆放建筑',
-        [STEP.other_turn]: '现在是其他人的回合',
-        [STEP.round_end]: '本阶段结束，你的分数是：',
-    }
+    useEffect(() => {
+        if (roundChessData[selectedChess]) {
+            status.playedChess = roundChessData[selectedChess] + store.color
+        } else {
+            status.playedChess = '1' + store.color
+        }
+        operate.createTempFloor()
+    }, [selectedChess, roundChessData])
+
+    useEffect(() => {
+        if (cardData[selectedCard]) {
+            status.playedCard = cardData[selectedCard]
+        } else {
+            status.playedCard = [0, 0]
+        }
+        operate.createTempFloor()
+    }, [selectedCard, cardData])
+
+    useEffect(() => {
+        const stepMsg = {
+            pre: '请选择本阶段游戏你所选用的棋子',
+            your: '你的回合，请摆放建筑',
+            other: '现在是其他人的回合',
+            end: '本阶段结束，你的分数是：',
+        }
+
+        console.log(step)
+
+        if (step === STEP.pre_round) {
+            setTempMsg(stepMsg.pre)
+        } else if (step.includes('turn')) {
+            if (store.color === step.replace('_turn', ''))
+                setTempMsg(stepMsg.your)
+            else setTempMsg(stepMsg.other)
+        } else if (step === STEP.round_end) {
+            setTempMsg(stepMsg.end)
+        }
+    }, [step, setTempMsg])
 
     const endReadyStep = () => {
         if (submitPressed) return
@@ -100,7 +133,7 @@ function DashBoard() {
                 结束准备
             </div>
         ),
-        [STEP.your_turn]: (
+        your: (
             <div
                 className={`${style.submit} ${style[store.color]} ${
                     submitPressed ? style.pressed : ''
@@ -112,8 +145,7 @@ function DashBoard() {
                 结束回合
             </div>
         ),
-        [STEP.other_turn]: '',
-        [STEP.round_end]: '',
+        other: '',
     }
 
     const roundChessArea = [0, 1, 2, 3, 4, 5].map((idx) => (
@@ -123,7 +155,7 @@ function DashBoard() {
                 idx === selectedChess ? style.selected : ''
             }`}
             onClick={(ev) => {
-                if (step !== STEP.your_turn) return
+                if (step.replace('_turn', '') !== store.color) return
                 if (roundChessData[idx]) setSelectedChess(idx)
                 else setSelectedChess(-2)
             }}>
@@ -186,12 +218,17 @@ function DashBoard() {
         <>
             <div className={`${style.btnBars}`}>
                 <div className={`${style.msg}`}>
-                    <div>{tempMsg || stepMsg[step]}</div>
+                    <div>{tempMsg}</div>
                     <div className={`${style.backView} ${style[store.color]}`}>
                         &#xe900;
                     </div>
                 </div>
-                <div className={`${style.btnArea}`}>{submitBtn[step]}</div>
+                <div className={`${style.btnArea}`}>
+                    {submitBtn[step] ||
+                        (step.replace('_turn', '') === store.color
+                            ? submitBtn.your
+                            : submitBtn.other)}
+                </div>
             </div>
             <div className={`${style.dash}`}>
                 <div className={`${style.cardArea}`}>

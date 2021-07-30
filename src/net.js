@@ -37,7 +37,9 @@ const net = {
                 })
             )
         }
+        const preOnmessage = ws.onmessage
         ws.onmessage = (ev) => {
+            if (preOnmessage) preOnmessage(ev)
             console.log(JSON.parse(ev.data))
         }
     },

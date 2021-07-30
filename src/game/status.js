@@ -34,8 +34,8 @@ const status = {
         controls: {},
     },
     mode: constant.VIEW_MODE,
-    playedChess: '2red',
-    playedCard: [1, 0],
+    playedChess: '',
+    playedCard: [],
 }
 
 export { status, constant }

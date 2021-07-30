@@ -56,6 +56,8 @@ const operate = {
     handleOperModeMove(ev) {
         if (status.mode === constant.VIEW_MODE) return
 
+        if (!operate.tempFloor) return
+
         const area = operate.choose(status.areas, constant.AREA_GROUP)
 
         if (operate.intersectObject === area) return
@@ -103,6 +105,7 @@ const operate = {
 
     createTempFloor() {
         if (!status.playedCard.length && !status.playedChess) return
+        console.log(status)
 
         if (operate.tempFloor) {
             operate.tempFloor = null

@@ -3,8 +3,10 @@ import { atom, useRecoilState, useSetRecoilState } from 'recoil'
 import './App.css'
 import { Chatroom } from './components/Chatroom'
 import { DashBoard } from './components/DashBoard'
+import { tempMsgAtom } from './components/DashBoard/data'
 import { InfoPanel } from './components/InfoPanel'
 import { Stage } from './components/Stage'
+import { store } from './components/store'
 import { constant } from './game'
 import { net } from './net'
 
@@ -13,25 +15,15 @@ const readyAtom = atom({
     key: 'ready-atom',
 })
 
-const STEP = {
-    waiting: 'waiting',
-    pre_round: 'pre_round',
-    red_turn: 'red_turn',
-    yellow_turn: 'yellow_turn',
-    blue_turn: 'blue_turn',
-    green_turn: 'green_turn',
-    round_end: 'round_end',
-    end: 'game_end',
-}
-
 const stepAtom = atom({
     key: 'step-atom',
-    default: STEP.pre_round,
+    default: store.step,
 })
 
 function App() {
     const [isReady, readyGo] = useRecoilState(readyAtom)
     const setStep = useSetRecoilState(stepAtom)
+    const setTempMsg = useSetRecoilState(tempMsgAtom)
 
     useEffect(() => {
         const roomKey = window.location.pathname.split('/')[1]
@@ -46,20 +38,21 @@ function App() {
                 net.setWs('ws://localhost:9000/')
             })
             .then((data) => {
-                const ws = net.ws
-
-                const preOnmessage = ws.onmessage
-                ws.onmessage = (ev) => {
+                const preOnmessage = net.ws.onmessage
+                net.ws.onmessage = (ev) => {
                     preOnmessage(ev)
-                    const { type, payload } = ev.data
+                    const { type, payload } = JSON.parse(ev.data)
 
                     if (type === constant.WS_TYPE.step) {
+                        console.log(ev.data)
                         setStep(payload.step)
+                        store.step = payload.step
+                        setTempMsg('')
                     }
                 }
                 // setStep(data.data.step)
             })
-    }, [readyGo, setStep])
+    }, [readyGo, setStep, setTempMsg])
 
     return (
         <div className='App'>
@@ -75,5 +68,5 @@ function App() {
     )
 }
 
-export { readyAtom, stepAtom, STEP }
+export { readyAtom, stepAtom }
 export default App
