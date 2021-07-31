@@ -19,9 +19,9 @@ function DashBoard() {
         roundChessDataSelector
     )
     const [leftChessData, setLeftChess] = useRecoilState(leftChessDataAtom)
-    const [selectedCard, setSelectedCard] = useState(-2)
+    const [selectedCard, setSelectedCard] = useState(0)
     const [hoveredCard, setHoveredCard] = useState(-2)
-    const [selectedChess, setSelectedChess] = useState(-2)
+    const [selectedChess, setSelectedChess] = useState(0)
     const [tempRoundChess, setTempRoundChess] = useState([])
     const [submitPressed, pressSubmit] = useState(false)
     const [tempMsg, setTempMsg] = useRecoilState(tempMsgAtom)
@@ -42,20 +42,25 @@ function DashBoard() {
     }, [isReady, setCardData, setRoundChessData])
 
     useEffect(() => {
-        if (roundChessData[selectedChess]) {
-            status.playedChess = roundChessData[selectedChess] + store.color
-        } else {
-            status.playedChess = '1' + store.color
-        }
+        if (!roundChessData.length) return
+
+        // if (roundChessData[selectedChess]) {
+        status.playedChess = roundChessData[selectedChess] + store.color
+        console.log(status)
+        // } else {
+        //     status.playedChess = roundChessData[0] + store.color
+        // }
         operate.createTempFloor()
     }, [selectedChess, roundChessData])
 
     useEffect(() => {
-        if (cardData[selectedCard]) {
-            status.playedCard = cardData[selectedCard]
-        } else {
-            status.playedCard = [0, 0]
-        }
+        if (!cardData.length) return
+
+        // if (cardData[selectedCard]) {
+        status.playedCard = cardData[selectedCard]
+        // } else {
+        //     status.playedCard = cardData[0]
+        // }
         operate.createTempFloor()
     }, [selectedCard, cardData])
 

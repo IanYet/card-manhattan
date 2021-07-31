@@ -44,10 +44,8 @@ function App() {
                     const { type, payload } = JSON.parse(ev.data)
 
                     if (type === constant.WS_TYPE.step) {
-                        console.log(ev.data)
                         setStep(payload.step)
                         store.step = payload.step
-                        setTempMsg('')
                     }
                 }
                 // setStep(data.data.step)

@@ -104,8 +104,9 @@ const operate = {
     },
 
     createTempFloor() {
-        if (!status.playedCard.length && !status.playedChess) return
         console.log(status)
+
+        if (!status.playedCard.length && !status.playedChess) return
 
         if (operate.tempFloor) {
             operate.tempFloor = null
