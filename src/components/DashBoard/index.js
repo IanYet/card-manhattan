@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { readyAtom, stepAtom } from '../../App'
-import { operate, status } from '../../game'
+import { Board, constant, operate, status } from '../../game'
 import { net } from '../../net'
 import { STEP, store } from '../store'
 import { Card } from './Card'
@@ -19,9 +19,9 @@ function DashBoard() {
         roundChessDataSelector
     )
     const [leftChessData, setLeftChess] = useRecoilState(leftChessDataAtom)
-    const [selectedCard, setSelectedCard] = useState(0)
+    const [selectedCard, setSelectedCard] = useState(-2)
     const [hoveredCard, setHoveredCard] = useState(-2)
-    const [selectedChess, setSelectedChess] = useState(0)
+    const [selectedChess, setSelectedChess] = useState(-2)
     const [tempRoundChess, setTempRoundChess] = useState([])
     const [submitPressed, pressSubmit] = useState(false)
     const [tempMsg, setTempMsg] = useRecoilState(tempMsgAtom)
@@ -44,24 +44,17 @@ function DashBoard() {
     useEffect(() => {
         if (!roundChessData.length) return
 
-        // if (roundChessData[selectedChess]) {
         status.playedChess = roundChessData[selectedChess] + store.color
-        console.log(status)
-        // } else {
-        //     status.playedChess = roundChessData[0] + store.color
-        // }
         operate.createTempFloor()
+        Board.changeMode(constant.OPER_MODE)
     }, [selectedChess, roundChessData])
 
     useEffect(() => {
         if (!cardData.length) return
 
-        // if (cardData[selectedCard]) {
         status.playedCard = cardData[selectedCard]
-        // } else {
-        //     status.playedCard = cardData[0]
-        // }
         operate.createTempFloor()
+        Board.changeMode(constant.OPER_MODE)
     }, [selectedCard, cardData])
 
     useEffect(() => {
@@ -77,9 +70,13 @@ function DashBoard() {
         if (step === STEP.pre_round) {
             setTempMsg(stepMsg.pre)
         } else if (step.includes('turn')) {
-            if (store.color === step.replace('_turn', ''))
+            if (store.color === step.replace('_turn', '')) {
+                setSelectedCard(0)
+                setSelectedChess(0)
                 setTempMsg(stepMsg.your)
-            else setTempMsg(stepMsg.other)
+            } else {
+                setTempMsg(stepMsg.other)
+            }
         } else if (step === STEP.round_end) {
             setTempMsg(stepMsg.end)
         }

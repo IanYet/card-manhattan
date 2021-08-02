@@ -22,6 +22,31 @@ const utils = {
             obj.material.dispose()
         }
     },
+
+    rotateUp(pos, up) {
+        const [x, y] = pos
+        const corner = [
+            [0, 0],
+            [0, 2],
+            [2, 2],
+            [2, 0],
+        ]
+        const middle = [
+            [0, 1],
+            [1, 2],
+            [2, 1],
+            [1, 0],
+        ]
+
+        const cornerIdx = corner.findIndex(([a, b]) => a === x && b === y)
+
+        if (cornerIdx === -1) {
+            const middleIdx = middle.findIndex(([a, b]) => a === x && b === y)
+            return middle[(middleIdx + Number(up)) % 4]
+        } else {
+            return corner[(cornerIdx + Number(up)) % 4]
+        }
+    },
 }
 
 export { utils }

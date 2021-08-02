@@ -36,6 +36,7 @@ const status = {
     mode: constant.VIEW_MODE,
     playedChess: '',
     playedCard: [],
+    playedArea: 0,
 }
 
 export { status, constant }

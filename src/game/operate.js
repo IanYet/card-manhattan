@@ -20,6 +20,7 @@ const operate = {
     intersectObject: null,
     tempFloor: null,
     pointerDownTime: 0,
+    up: 0,
 
     choose(objs, type) {
         const subMesh = operate.raycaster.intersectObjects(objs, true)[0]
@@ -62,7 +63,8 @@ const operate = {
 
         if (operate.intersectObject === area) return
 
-        const [x, y] = status.playedCard
+        const [x, y] = utils.rotateUp(status.playedCard, operate.up)
+        // const [x, y] = status.playedCard
 
         if (operate.intersectObject) {
             const preBuilding = operate.intersectObject.children.find(
@@ -82,8 +84,9 @@ const operate = {
                     building.userData.data,
                     operate.tempFloor.userData.data
                 )
-            )
+            ) {
                 addFloor(building, operate.tempFloor)
+            }
         }
         operate.intersectObject = area
     },
@@ -92,6 +95,7 @@ const operate = {
         const time = ev.timeStamp - operate.pointerDownTime
         if (time >= 120) return
 
+        console.log(operate.intersectObject)
         if (ev.button === 0) {
             if (status.mode === constant.VIEW_MODE) return
             Board.changeMode(constant.VIEW_MODE)
@@ -104,13 +108,12 @@ const operate = {
     },
 
     createTempFloor() {
-        console.log(status)
-
-        if (!status.playedCard.length && !status.playedChess) return
+        if (!status.playedCard?.length && !status.playedChess) return
+        console.log('create')
 
         if (operate.tempFloor) {
+            operate.disposeTempFloor()
             operate.tempFloor = null
-            utils.disposeAll(operate.tempFloor)
         }
 
         const floorData = status.playedChess
@@ -119,7 +122,9 @@ const operate = {
     },
 
     disposeTempFloor() {
-        if (operate.tempFloor) utils.disposeAll(operate.tempFloor)
+        if (operate.tempFloor) {
+            utils.disposeAll(operate.tempFloor)
+        }
     },
 
     /**

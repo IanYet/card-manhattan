@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { store } from './components/store'
-import { constant } from './game'
+import { constant, operate } from './game'
 
 const net = {
     url: '',
@@ -22,6 +22,8 @@ const net = {
             store.leftChessData = data.data.leftChessData
             store.playedData = data.data.playedData
             store.userList = data.data.userList
+
+            operate.up = store.up
         }),
     setWs: (url) => {
         const ws = new WebSocket(url)
