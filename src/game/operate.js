@@ -1,7 +1,7 @@
 import TWEEN, { Tween } from '@tweenjs/tween.js'
 import { Board } from './Board'
 import { checkBuildable } from './calc'
-import { addFloor, generateFloor, removeFloor } from './draw'
+import { addFloor, drawBuilding, generateFloor, removeFloor } from './draw'
 import { constant, status } from './status'
 import { utils } from './utils'
 
@@ -95,9 +95,9 @@ const operate = {
         const time = ev.timeStamp - operate.pointerDownTime
         if (time >= 120) return
 
-        console.log(operate.intersectObject)
         if (ev.button === 0) {
             if (status.mode === constant.VIEW_MODE) return
+            status.playedArea = operate.intersectObject.userData.id
             Board.changeMode(constant.VIEW_MODE)
         } else if (ev.button === 2) {
             Board.changeMode(constant.OPER_MODE)
@@ -109,12 +109,8 @@ const operate = {
 
     createTempFloor() {
         if (!status.playedCard?.length && !status.playedChess) return
-        console.log('create')
 
-        if (operate.tempFloor) {
-            operate.disposeTempFloor()
-            operate.tempFloor = null
-        }
+        operate.disposeTempFloor()
 
         const floorData = status.playedChess
         const floor = generateFloor(floorData, constant.TEMP_FLOOR)
@@ -123,7 +119,10 @@ const operate = {
 
     disposeTempFloor() {
         if (operate.tempFloor) {
+            if (operate.tempFloor.parent)
+                operate.tempFloor.parent.remove(operate.tempFloor)
             utils.disposeAll(operate.tempFloor)
+            // operate.tempFloor = null
         }
     },
 
@@ -138,6 +137,16 @@ const operate = {
         el.addEventListener('pointermove', operate.handleOperModeMove)
         el.addEventListener('pointerdown', this.handlePointerDown)
         el.addEventListener('pointerup', this.handlePointerUp)
+    },
+
+    play(floor, card, area, up) {
+        const buildingData = [floor]
+        const [x, y] = utils.rotateUp(card, up)
+        const buildingGroup = status.buildings.find(
+            (building) => building.userData.id === `${area}-${x}-${y}`
+        )
+
+        drawBuilding(buildingGroup, buildingData)
     },
 
     reset() {

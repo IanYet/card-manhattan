@@ -42,20 +42,22 @@ function DashBoard() {
     }, [isReady, setCardData, setRoundChessData])
 
     useEffect(() => {
-        if (!roundChessData.length) return
+        if (!roundChessData.length || step === STEP.pre_round) return
+        if (store.color !== step.replace('_turn', '')) return
 
         status.playedChess = roundChessData[selectedChess] + store.color
         operate.createTempFloor()
         Board.changeMode(constant.OPER_MODE)
-    }, [selectedChess, roundChessData])
+    }, [selectedChess, roundChessData, step])
 
     useEffect(() => {
-        if (!cardData.length) return
+        if (!cardData.length || step === STEP.pre_round) return
+        if (store.color !== step.replace('_turn', '')) return
 
         status.playedCard = cardData[selectedCard]
         operate.createTempFloor()
         Board.changeMode(constant.OPER_MODE)
-    }, [selectedCard, cardData])
+    }, [selectedCard, cardData, step])
 
     useEffect(() => {
         const stepMsg = {
@@ -71,11 +73,15 @@ function DashBoard() {
             setTempMsg(stepMsg.pre)
         } else if (step.includes('turn')) {
             if (store.color === step.replace('_turn', '')) {
-                setSelectedCard(0)
-                setSelectedChess(0)
-                setTempMsg(stepMsg.your)
+                setTimeout(() => {
+                    setSelectedCard(0)
+                    setSelectedChess(0)
+                    setTempMsg(stepMsg.your)
+                }, 100)
             } else {
-                setTempMsg(stepMsg.other)
+                setTimeout(() => {
+                    setTempMsg(stepMsg.other)
+                }, 100)
             }
         } else if (step === STEP.round_end) {
             setTempMsg(stepMsg.end)
@@ -86,7 +92,6 @@ function DashBoard() {
         if (submitPressed) return
         if (tempRoundChess.length < userNum) {
             setTempMsg('请选择' + userNum + '个棋子')
-            setTimeout(() => setTempMsg(''), 5000)
             return
         }
 
@@ -125,6 +130,35 @@ function DashBoard() {
             })
     }
 
+    const play = () => {
+        const floor = roundChessData[selectedChess] + store.color
+        status.playedChess = floor
+
+        const card = cardData[selectedCard]
+        status.playedCard = card
+
+        const area = status.playedArea
+        store.cityData[area][card[0]][card[1]].push(floor)
+
+        const body = {
+            userId: store.userId,
+            floor,
+            card,
+            area: status.playedArea,
+            leftCard: store.cardData,
+            roundChess: store.chessData,
+            cityData: store.cityData,
+        }
+        operate.disposeTempFloor()
+        operate.play(floor, card, area, store.up)
+
+        net.play(body).then((data) => {
+            console.log(data.data)
+        })
+
+        console.log(store)
+    }
+
     const submitBtn = {
         [STEP.pre_round]: (
             <div
@@ -142,7 +176,8 @@ function DashBoard() {
                 }`}
                 onClick={(ev) => {
                     if (submitPressed) return
-                    pressSubmit(true)
+                    // pressSubmit(true)
+                    play()
                 }}>
                 结束回合
             </div>

@@ -47,7 +47,7 @@ const net = {
     },
     postRoundChess: async (postData) =>
         axios.post(`${net.url}${net.key}/postRoundChess`, postData),
-    //mock websocket data
+    play: async (playData) => axios.post(`${net.url}${net.key}/postRoundChess`, playData)
 }
 
 export { net }

@@ -39,12 +39,14 @@ const utils = {
         ]
 
         const cornerIdx = corner.findIndex(([a, b]) => a === x && b === y)
+        const middleIdx = middle.findIndex(([a, b]) => a === x && b === y)
 
-        if (cornerIdx === -1) {
-            const middleIdx = middle.findIndex(([a, b]) => a === x && b === y)
+        if (middleIdx !== -1) {
             return middle[(middleIdx + Number(up)) % 4]
-        } else {
+        } else if (cornerIdx !== -1) {
             return corner[(cornerIdx + Number(up)) % 4]
+        } else {
+            return pos
         }
     },
 }
