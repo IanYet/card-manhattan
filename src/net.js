@@ -41,13 +41,14 @@ const net = {
         }
         const preOnmessage = ws.onmessage
         ws.onmessage = (ev) => {
+            console.log('net.js 44')
             if (preOnmessage) preOnmessage(ev)
             console.log(JSON.parse(ev.data))
         }
     },
     postRoundChess: async (postData) =>
         axios.post(`${net.url}${net.key}/postRoundChess`, postData),
-    play: async (playData) => axios.post(`${net.url}${net.key}/postRoundChess`, playData)
+    play: async (playData) => axios.post(`${net.url}${net.key}/play`, playData),
 }
 
 export { net }

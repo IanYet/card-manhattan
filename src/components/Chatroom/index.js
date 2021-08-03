@@ -1,19 +1,16 @@
 import { useState, useRef, useEffect } from 'react/cjs/react.development'
-import { useRecoilState, atom } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { constant } from '../../game'
+import { msgListAtom, playedDataAtom } from './data'
 import { net } from '../../net'
 import { store } from '../store'
 import style from './chatroom.module.css'
-
-const msgListAtom = atom({
-    key: 'msgListStom',
-    default: [],
-})
 
 function Chatroom() {
     const [isSpread, toggleSpread] = useState(false)
     const [inputMsg, setInputMsg] = useState('')
     const [msgList, setMsgList] = useRecoilState(msgListAtom)
+    const playedDataList = useRecoilValue(playedDataAtom)
     const [isChatChannel, toggleChannel] = useState(true)
     const listRef = useRef(null)
 
@@ -45,15 +42,29 @@ function Chatroom() {
             </div>
             <div>
                 <div className={`${style.popList}`} ref={listRef}>
-                    {msgList.map((msg, idx) => (
-                        <div
-                            key={msg.value + idx}
-                            className={`${style.pop} ${style[msg.color]} ${
-                                msg.color === store.color ? style.self : ''
-                            } ${isSpread ? '' : style.collapse}`}>
-                            {msg.value}
-                        </div>
-                    ))}
+                    {isChatChannel
+                        ? msgList.map((msg, idx) => (
+                              <div
+                                  key={msg.value + idx}
+                                  className={`${style.pop} ${
+                                      style[msg.color]
+                                  } ${
+                                      msg.color === store.color
+                                          ? style.self
+                                          : ''
+                                  } ${isSpread ? '' : style.collapse}`}>
+                                  {msg.value}
+                              </div>
+                          ))
+                        : playedDataList.map((d, idx) => (
+                              <div
+                                  key={idx + d.floor}
+                                  className={`${style.pop} ${style[d.color]} ${
+                                      d.color === store.color ? style.self : ''
+                                  } ${
+                                      isSpread ? '' : style.collapse
+                                  }`}>{`${d.floor}${d.card}${d.area}`}</div>
+                          ))}
                 </div>
                 <div
                     className={`${style.inputContainer}   ${
@@ -98,4 +109,4 @@ function Chatroom() {
     )
 }
 
-export { Chatroom, msgListAtom }
+export { Chatroom, msgListAtom, playedDataAtom }

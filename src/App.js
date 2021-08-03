@@ -40,6 +40,7 @@ function App() {
             .then((data) => {
                 const preOnmessage = net.ws.onmessage
                 net.ws.onmessage = (ev) => {
+                    console.log('app.js 42')
                     preOnmessage(ev)
                     const { type, payload } = JSON.parse(ev.data)
 

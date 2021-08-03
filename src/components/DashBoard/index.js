@@ -77,6 +77,7 @@ function DashBoard() {
                     setSelectedCard(0)
                     setSelectedChess(0)
                     setTempMsg(stepMsg.your)
+                    pressSubmit(false)
                 }, 100)
             } else {
                 setTimeout(() => {
@@ -132,28 +133,35 @@ function DashBoard() {
 
     const play = () => {
         const floor = roundChessData[selectedChess] + store.color
-        status.playedChess = floor
-
         const card = cardData[selectedCard]
-        status.playedCard = card
-
         const area = status.playedArea
-        store.cityData[area][card[0]][card[1]].push(floor)
+        const cityData = JSON.parse(JSON.stringify(store.cityData))
+        cityData[area][card[0]][card[1]].push(floor)
+
+        const leftCard = store.cardData.map((val, idx) => idx !== selectedCard)
+        const roundChess = store.chessData.map(
+            (val, idx) => idx !== selectedChess
+        )
 
         const body = {
             userId: store.userId,
             floor,
             card,
-            area: status.playedArea,
-            leftCard: store.cardData,
-            roundChess: store.chessData,
-            cityData: store.cityData,
+            area,
+            leftCard,
+            roundChess,
+            cityData,
         }
-        operate.disposeTempFloor()
-        operate.play(floor, card, area, store.up)
 
         net.play(body).then((data) => {
-            console.log(data.data)
+            const newCard = data.data
+            console.log(newCard)
+            // status.playedChess = floor
+            // status.playedCard = card
+            operate.disposeTempFloor()
+            // operate.play(floor, card, area, store.up)
+            setCardData(newCard)
+            setRoundChessData(roundChess)
         })
 
         console.log(store)

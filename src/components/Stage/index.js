@@ -1,17 +1,44 @@
 import { useEffect, useRef } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { stepAtom } from '../../App'
-import { Board, constant, startGame } from '../../game'
+import { Board, constant, operate, startGame } from '../../game'
+import { net } from '../../net'
+import { playedDataAtom } from '../Chatroom'
 import { store } from '../store'
 import style from './stage.module.css'
 
 function Stage() {
     const ref = useRef(null)
     const step = useRecoilValue(stepAtom)
+    const setPlayedData = useSetRecoilState(playedDataAtom)
 
     useEffect(() => {
         startGame(ref.current, store.up, store.cityData)
-    }, [])
+
+        const preOnmessage = net.ws.onmessage
+        net.ws.onmessage = (ev) => {
+            console.log('stage.js 20')
+            if (preOnmessage) preOnmessage(ev)
+            const { type, payload } = JSON.parse(ev.data)
+
+            if (type === constant.WS_TYPE.step) {
+                if (payload.playedData) {
+                    setPlayedData(payload.playedData)
+                    store.playedData = payload.playedData
+                }
+                if (payload.play) {
+                    const { floor, card, area, up } = payload.play
+                    operate.play(floor, card, area, up)
+                }
+                if (payload.cityData) {
+                    store.cityData = payload.cityData
+                }
+                if (payload.users) {
+                    store.userList = payload.users
+                }
+            }
+        }
+    }, [setPlayedData])
 
     useEffect(() => {
         if (step.replace('_turn', '') === store.color) {
