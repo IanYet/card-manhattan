@@ -9,7 +9,23 @@ function InfoPanel() {
     useEffect(() => {
         console.log(userInfo)
     }, [userInfo])
-    return <div className={`${style.info}`}>info panel</div>
+
+    return (
+        <div className={`${style.info}`}>
+            {userInfo.map((user) => (
+                <div
+                    key={user.color}
+                    className={`${style[user.color]} ${style.userboard}`}>
+                    <div className={`${style.pin}`}>
+                        <div className={`${style.avatar}`}></div>
+                        <div className={`${style.infoRow}`}></div>
+                    </div>
+                    <div></div>
+                    <div></div>
+                </div>
+            ))}
+        </div>
+    )
 }
 
 export { InfoPanel, userInfoAtom }

@@ -1,14 +1,21 @@
 .info {
     position: fixed;
     z-index: 10;
-    background-color: white;
 
-    top: 2rem;
+    top: 5rem;
     right: 0;
 
-    width: 12rem;
-    min-height: 40rem;
+    width: 19rem;
+    max-height: calc(80vh - 10rem);
+    overflow-y: auto;
 
     box-sizing: border-box;
-    border-radius: 6px 0 0 6px;
+    padding: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
 }
+
+
