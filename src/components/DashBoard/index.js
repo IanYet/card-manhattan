@@ -217,7 +217,6 @@ function DashBoard() {
             onClick={(ev) => {
                 if (step.replace('_turn', '') !== store.color) return
                 if (roundChessData[idx]) setSelectedChess(idx)
-                else setSelectedChess(-2)
             }}>
             {roundChessData[idx] ? (
                 <img
