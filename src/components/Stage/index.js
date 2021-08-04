@@ -34,7 +34,7 @@ function Stage() {
                     store.cityData = payload.cityData
                 }
                 if (payload.users) {
-                    store.userList = payload.users
+                    store.userList = { ...store.userList, ...payload.users }
                 }
             }
         }

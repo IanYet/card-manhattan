@@ -135,11 +135,25 @@ function DashBoard() {
         const floor = roundChessData[selectedChess] + store.color
         const card = cardData[selectedCard]
         const area = status.playedArea
-        const cityData = JSON.parse(JSON.stringify(store.cityData))
-        cityData[area][card[0]][card[1]].push(floor)
 
-        const leftCard = store.cardData.map((val, idx) => idx !== selectedCard)
-        const roundChess = store.chessData.map(
+        if (area === '') {
+            const preMsg = tempMsg
+            setTempMsg('请选择城区')
+            setTimeout(() => {
+                setTempMsg(preMsg)
+            }, 3000)
+
+            return
+        }
+        //TODO
+        const [x, y] = status.truePos
+        const cityData = JSON.parse(JSON.stringify(store.cityData))
+        cityData[area][x][y].push(floor)
+
+        const leftCard = store.cardData.filter(
+            (val, idx) => idx !== selectedCard
+        )
+        const roundChess = store.chessData.filter(
             (val, idx) => idx !== selectedChess
         )
 
@@ -162,6 +176,8 @@ function DashBoard() {
             // operate.play(floor, card, area, store.up)
             setCardData(newCard)
             setRoundChessData(roundChess)
+            setSelectedCard(-2)
+            setSelectedChess(-2)
         })
 
         console.log(store)

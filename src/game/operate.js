@@ -97,8 +97,12 @@ const operate = {
 
         if (ev.button === 0) {
             if (status.mode === constant.VIEW_MODE) return
-            status.playedArea = operate.intersectObject.userData.id
-            Board.changeMode(constant.VIEW_MODE)
+
+            if (operate.intersectObject) {
+                status.playedArea = operate.intersectObject.userData.id
+                status.truePos = utils.rotateUp(status.playedCard, operate.up)
+                Board.changeMode(constant.VIEW_MODE)
+            }
         } else if (ev.button === 2) {
             Board.changeMode(constant.OPER_MODE)
         }
