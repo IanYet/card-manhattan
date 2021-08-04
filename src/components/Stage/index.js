@@ -4,6 +4,7 @@ import { stepAtom } from '../../App'
 import { Board, constant, operate, startGame } from '../../game'
 import { net } from '../../net'
 import { playedDataAtom } from '../Chatroom'
+import { userInfoAtom } from '../InfoPanel'
 import { store } from '../store'
 import style from './stage.module.css'
 
@@ -11,6 +12,7 @@ function Stage() {
     const ref = useRef(null)
     const step = useRecoilValue(stepAtom)
     const setPlayedData = useSetRecoilState(playedDataAtom)
+    const setUserInfo = useSetRecoilState(userInfoAtom)
 
     useEffect(() => {
         startGame(ref.current, store.up, store.cityData)
@@ -34,11 +36,20 @@ function Stage() {
                     store.cityData = payload.cityData
                 }
                 if (payload.users) {
-                    store.userList = { ...store.userList, ...payload.users }
+                    store.userList
+                        .forEach((val, idx) => {
+                            store.userList[idx] = {
+                                ...store.userList[idx],
+                                ...payload.user[idx],
+                            }
+                        })
+                        .sort((a, b) => Number(a.score) - Number(b.score))
+
+                    setUserInfo(store.userList)
                 }
             }
         }
-    }, [setPlayedData])
+    }, [setPlayedData, setUserInfo])
 
     useEffect(() => {
         if (step.replace('_turn', '') === store.color) {

@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { atom, useRecoilState, useSetRecoilState } from 'recoil'
 import './App.css'
-import { Chatroom } from './components/Chatroom'
+import { Chatroom, playedDataAtom } from './components/Chatroom'
 import { DashBoard } from './components/DashBoard'
 import { tempMsgAtom } from './components/DashBoard/data'
-import { InfoPanel } from './components/InfoPanel'
+import { InfoPanel, userInfoAtom } from './components/InfoPanel'
 import { Stage } from './components/Stage'
 import { store } from './components/store'
 import { constant } from './game'
@@ -24,6 +24,8 @@ function App() {
     const [isReady, readyGo] = useRecoilState(readyAtom)
     const setStep = useSetRecoilState(stepAtom)
     const setTempMsg = useSetRecoilState(tempMsgAtom)
+    const setPlayedData = useSetRecoilState(playedDataAtom)
+    const setUserInfo = useSetRecoilState(userInfoAtom)
 
     useEffect(() => {
         const roomKey = window.location.pathname.split('/')[1]
@@ -36,6 +38,8 @@ function App() {
             .then(() => {
                 readyGo(true)
                 net.setWs('ws://localhost:9000/')
+                setPlayedData(store.playedData)
+                setUserInfo(store.userList)
             })
             .then((data) => {
                 const preOnmessage = net.ws.onmessage
@@ -51,7 +55,7 @@ function App() {
                 }
                 // setStep(data.data.step)
             })
-    }, [readyGo, setStep, setTempMsg])
+    }, [readyGo, setStep, setTempMsg, setUserInfo, setPlayedData])
 
     return (
         <div className='App'>

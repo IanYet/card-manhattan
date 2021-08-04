@@ -145,7 +145,7 @@ function DashBoard() {
 
             return
         }
-        //TODO
+
         const [x, y] = status.truePos
         const cityData = JSON.parse(JSON.stringify(store.cityData))
         cityData[area][x][y].push(floor)

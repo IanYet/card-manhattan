@@ -17,7 +17,7 @@ const store = {
     cityData: {},
     cardData: [],
     chessData: [],
-    userList: {},
+    userList: [],
 
     leftChessData: {
         1: 11,
