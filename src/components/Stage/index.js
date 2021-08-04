@@ -36,13 +36,11 @@ function Stage() {
                     store.cityData = payload.cityData
                 }
                 if (payload.users) {
-                    store.userList
-                        .forEach((val, idx) => {
-                            store.userList[idx] = {
-                                ...store.userList[idx],
-                                ...payload.user[idx],
-                            }
-                        })
+                    store.userList = store.userList
+                        .map((user, idx) => ({
+                            ...user,
+                            ...payload.users[idx],
+                        }))
                         .sort((a, b) => Number(a.score) - Number(b.score))
 
                     setUserInfo(store.userList)

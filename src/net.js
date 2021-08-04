@@ -21,7 +21,7 @@ const net = {
             store.userId = data.data.userId
             store.leftChessData = data.data.leftChessData
             store.playedData = data.data.playedData
-            store.userList = data.data.userList
+            store.userList = data.data.users
 
             operate.up = store.up
         }),

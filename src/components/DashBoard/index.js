@@ -169,7 +169,6 @@ function DashBoard() {
 
         net.play(body).then((data) => {
             const newCard = data.data
-            console.log(newCard)
             // status.playedChess = floor
             // status.playedCard = card
             operate.disposeTempFloor()

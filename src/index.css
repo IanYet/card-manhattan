@@ -20,4 +20,5 @@ body {
     color: #616365;
 
     --shadow: -15px 0 40px -10px rgba(37, 37, 37, 0.17);
+    --big-shadow: 0 15px 40px -10px rgb(0 64 128 / 40%);
 }
