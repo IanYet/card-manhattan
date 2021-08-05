@@ -3,7 +3,7 @@ import { atom, useRecoilState, useSetRecoilState } from 'recoil'
 import './App.css'
 import { Chatroom, playedDataAtom } from './components/Chatroom'
 import { DashBoard } from './components/DashBoard'
-import { tempMsgAtom } from './components/DashBoard/data'
+import { leftChessDataAtom, tempMsgAtom } from './components/DashBoard/data'
 import { InfoPanel, userInfoAtom } from './components/InfoPanel'
 import { Stage } from './components/Stage'
 import { store } from './components/store'
@@ -26,6 +26,7 @@ function App() {
     const setTempMsg = useSetRecoilState(tempMsgAtom)
     const setPlayedData = useSetRecoilState(playedDataAtom)
     const setUserInfo = useSetRecoilState(userInfoAtom)
+    const setLeftChessData = useSetRecoilState(leftChessDataAtom)
 
     useEffect(() => {
         const roomKey = window.location.pathname.split('/')[1]
@@ -40,6 +41,7 @@ function App() {
                 net.setWs('ws://localhost:9000/')
                 setPlayedData(store.playedData)
                 setUserInfo(store.userList)
+                setLeftChessData(store.leftChessData)
             })
             .then((data) => {
                 const preOnmessage = net.ws.onmessage
@@ -55,7 +57,14 @@ function App() {
                 }
                 // setStep(data.data.step)
             })
-    }, [readyGo, setStep, setTempMsg, setUserInfo, setPlayedData])
+    }, [
+        readyGo,
+        setStep,
+        setTempMsg,
+        setUserInfo,
+        setPlayedData,
+        setLeftChessData,
+    ])
 
     return (
         <div className='App'>

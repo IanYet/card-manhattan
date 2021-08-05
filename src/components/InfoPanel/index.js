@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react/cjs/react.development'
 import { useRecoilValue } from 'recoil'
 import { stepAtom } from '../../App'
+import { net } from '../../net'
+import { STEP, store } from '../store'
+import { calcScore } from './calc'
 import { userInfoAtom } from './data'
 import style from './infoPanel.module.css'
 
@@ -9,9 +12,33 @@ function InfoPanel() {
     const step = useRecoilValue(stepAtom)
     const [spread, setSpread] = useState({})
 
+    // useEffect(() => {
+    //     const preOnmessage = net.ws.preOnmessage
+    //     net.ws.onmessage = ev => {
+    //         if (preOnmessage) preOnmessage(ev)
+
+    //         const { type, payload } = JSON.parse(ev.data)
+    //         if(type === constant.WS_TYPE.step && )
+    //     }
+    // },[])
+
     useEffect(() => {
         console.log(userInfo)
     }, [userInfo])
+
+    useEffect(() => {
+        console.log('info.js 18')
+        if (step !== STEP.round_end) return
+
+        const score = calcScore(store.cityData)
+        net.postScore({
+            userId: store.userId,
+            score: score[store.color],
+        }).then(() => {
+            console.log('ok')
+        })
+        console.log(score)
+    }, [step])
 
     const spreadClick = (color) => (ev) => {
         const spreadTmp = { ...spread }

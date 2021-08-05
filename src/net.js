@@ -21,7 +21,7 @@ const net = {
             store.userId = data.data.userId
             store.leftChessData = data.data.leftChessData
             store.playedData = data.data.playedData
-            store.userList = data.data.users
+            store.userList = data.data.users.sort((a, b) => b.up - a.up)
 
             operate.up = store.up
         }),
@@ -49,6 +49,8 @@ const net = {
     postRoundChess: async (postData) =>
         axios.post(`${net.url}${net.key}/postRoundChess`, postData),
     play: async (playData) => axios.post(`${net.url}${net.key}/play`, playData),
+    postScore: async (scoreData) =>
+        axios.post(`${net.url}${net.key}/score`, scoreData),
 }
 
 export { net }

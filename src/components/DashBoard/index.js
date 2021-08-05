@@ -178,8 +178,6 @@ function DashBoard() {
             setSelectedCard(-2)
             setSelectedChess(-2)
         })
-
-        console.log(store)
     }
 
     const submitBtn = {

@@ -41,7 +41,7 @@ function Stage() {
                             ...user,
                             ...payload.users[idx],
                         }))
-                        .sort((a, b) => Number(a.score) - Number(b.score))
+                        .sort((a, b) => b.up - a.up)
 
                     setUserInfo(store.userList)
                 }
