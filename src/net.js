@@ -21,7 +21,7 @@ const net = {
             store.userId = data.data.userId
             store.leftChessData = data.data.leftChessData
             store.playedData = data.data.playedData
-            store.userList = data.data.users.sort((a, b) => b.up - a.up)
+            store.userList = data.data.users.sort((a, b) => a.up - b.up)
 
             operate.up = store.up
         }),
