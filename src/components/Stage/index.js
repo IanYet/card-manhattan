@@ -42,7 +42,6 @@ function Stage() {
                         )
 
                         const res = { ...user, ...newUser }
-                        console.log(res)
                         return res
                     })
 

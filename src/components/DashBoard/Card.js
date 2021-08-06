@@ -94,10 +94,8 @@ function Card({
                         : 'rgba(255,255,255,1)',
             }}
             onClick={(ev) => {
-                if (step.replace('_turn','') === store.color) {
-                    idx === selectedCard
-                        ? setSelectedCard(-2)
-                        : setSelectedCard(idx)
+                if (step.replace('_turn', '') === store.color) {
+                    setSelectedCard(idx)
                 }
             }}
             onPointerEnter={(ev) => setHoveredCard(idx)}
