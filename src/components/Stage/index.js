@@ -36,11 +36,14 @@ function Stage() {
                     store.cityData = payload.cityData
                 }
                 if (payload.users) {
-                    store.userList.forEach((user, idx) => {
+                    store.userList = store.userList.map((user, idx) => {
                         const newUser = payload.users.find(
                             (pu) => pu.color === user.color
                         )
-                        user = { ...user, ...newUser }
+
+                        const res = { ...user, ...newUser }
+                        console.log(res)
+                        return res
                     })
 
                     setUserInfo(store.userList)
