@@ -32,13 +32,13 @@ function App() {
         const roomKey = window.location.pathname.split('/')[1]
         const userId = window.location.search.split('=')[1]
 
-        net.setUrl('http://192.168.0.37:9000/')
+        net.setUrl('http://127.0.0.1:9000/')
         net.setKey(roomKey)
         net.setId(userId)
         net.getInitData()
             .then(() => {
                 readyGo(true)
-                net.setWs('ws://192.168.0.37:9000/')
+                net.setWs('ws://127.0.0.1:9000/')
                 setPlayedData(store.playedData)
                 setUserInfo(store.userList)
                 setLeftChessData(store.leftChessData)

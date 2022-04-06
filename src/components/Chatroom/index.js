@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react/cjs/react.development'
+import { useState, useRef, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { constant } from '../../game'
 import { msgListAtom, playedDataAtom } from './data'
